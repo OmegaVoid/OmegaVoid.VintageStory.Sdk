@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="OmegaVoid.VintageStory.Sdk.SourceGen/OmegaVoid.VintageStory.Sdk.SourceGen.Sample/OmegaVoid.VintageStory.Sdk.SourceGen.Sample.csproj" />
+  <Project Path="OmegaVoid.VintageStory.Sdk.SourceGen/OmegaVoid.VintageStory.Sdk.SourceGen.Tests/OmegaVoid.VintageStory.Sdk.SourceGen.Tests.csproj" />
+  <Project Path="OmegaVoid.VintageStory.Sdk.SourceGen/OmegaVoid.VintageStory.Sdk.SourceGen/OmegaVoid.VintageStory.Sdk.SourceGen.csproj" />
+  <Project Path="OmegaVoid.VintageStory.Sdk.Tasks/OmegaVoid.VintageStory.Sdk.Tasks.Sample/OmegaVoid.VintageStory.Sdk.Tasks.Sample.csproj" />
+  <Project Path="OmegaVoid.VintageStory.Sdk.Tasks/OmegaVoid.VintageStory.Sdk.Tasks.Tests/OmegaVoid.VintageStory.Sdk.Tasks.Tests.csproj" />
+  <Project Path="OmegaVoid.VintageStory.Sdk.Tasks/OmegaVoid.VintageStory.Sdk.Tasks/OmegaVoid.VintageStory.Sdk.Tasks.csproj" />
+  <Project Path="OmegaVoid.VintageStory.Sdk/OmegaVoid.VintageStory.Sdk.csproj" />
+</Solution>

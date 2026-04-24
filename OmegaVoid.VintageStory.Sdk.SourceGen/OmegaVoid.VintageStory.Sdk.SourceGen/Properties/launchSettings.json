@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "DebugRoslynSourceGenerator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../OmegaVoid.VintageStory.Sdk.SourceGen.Sample/OmegaVoid.VintageStory.Sdk.SourceGen.Sample.csproj"
+    }
+  }
+}

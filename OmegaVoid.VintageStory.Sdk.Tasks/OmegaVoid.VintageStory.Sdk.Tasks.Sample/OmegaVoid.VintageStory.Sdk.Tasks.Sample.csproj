@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <RootNamespace>OmegaVoid.VintageStory.Sdk.Tasks.Sample</RootNamespace>
+    </PropertyGroup>
+    <PropertyGroup>
+        <OutputDir>bin\$(Configuration)</OutputDir>
+        
+    </PropertyGroup>
+
+    <Target Name="MyTarget" AfterTargets="Build">
+        
+        <ItemGroup>
+            <Dependency Include="game" Version="*" />
+            <Dependency Include="vsimgui" Version="1.2.2" />
+            <Dependency Include="configlib" Version="1.11.1" />
+            <Dependency Include="insanitylib" Version="2.0.1" />
+        </ItemGroup>
+        <Dependencies Dependency="@(Dependency)" OutputDir="$(OutputDir)"/>
+        
+    </Target>
+
+    <UsingTask TaskName="VSPackage.Dependencies"
+               AssemblyFile="..\VSPackage\bin\Release\net10.0\VSPackage.dll"/>
+
+    <ItemGroup>
+        <None Remove="DDD.UbiquitousLanguageRegistry.txt"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <ModID>testttt</ModID>
+        <HasInsanityLibDependency>true</HasInsanityLibDependency>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <CompilerVisibleProperty Include="ModID" />
+        <CompilerVisibleProperty Include="HasInsanityLibDependency" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\OmegaVoid.VintageStory.Sdk.Tasks\OmegaVoid.VintageStory.Sdk.Tasks.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="VSPackage">
+        <HintPath>..\VSPackage\bin\Release\net10.0\VSPackage.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
