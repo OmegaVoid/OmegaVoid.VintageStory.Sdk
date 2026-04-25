@@ -6,12 +6,15 @@ using Newtonsoft.Json.Linq;
 
 namespace OmegaVoid.VintageStory.Sdk.Tasks.ModInfo;
 
-public record Dependency(string Id, string Version)
+public record Dependency(string Id, string Version, bool Fetch = true)
 {
     public string Id { get; init; } = Id;
     public string Version { get; init; } = Version;
 
-    public Dependency(ITaskItem item) : this(item.GetMetadata("Identity"), item.GetMetadata("Version"))
+    [JsonIgnore]
+    public bool Fetch { get; set; } = Fetch;
+
+    public Dependency(ITaskItem item) : this(item.GetMetadata("Identity"), item.GetMetadata("Version"), bool.Parse(item.GetMetadata("Fetch")))
     {
     }
     public Dependency(Moddb.ModdbModRelease release) : this(release.IdString, release.Version)

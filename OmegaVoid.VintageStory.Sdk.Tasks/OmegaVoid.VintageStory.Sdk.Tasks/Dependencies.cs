@@ -30,6 +30,7 @@ public class Dependencies : Microsoft.Build.Utilities.Task
             Directory.Delete(OutputDir, true);
         Directory.CreateDirectory(OutputDir);
         var dependencies1 = DependencyParser.ParseDependencies(Dependency);
+        dependencies1 = dependencies1.Where(pair => pair.Value.Fetch).ToDictionary();
         var dependencies2 = await DependencyParser.FetchModDependencies(dependencies1.Keys);
         
         var matchedDeps = DependencyParser.MatchDependencies(dependencies1, dependencies2);

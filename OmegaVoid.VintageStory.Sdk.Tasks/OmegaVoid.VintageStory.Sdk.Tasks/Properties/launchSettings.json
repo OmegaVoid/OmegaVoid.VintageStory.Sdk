@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Push": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "nuget push ../$(PackageId).$(Version).nupkg --api-key $(ApiKey) --source https://api.nuget.org/v3/index.json"
+      
+    }
+  }
+}

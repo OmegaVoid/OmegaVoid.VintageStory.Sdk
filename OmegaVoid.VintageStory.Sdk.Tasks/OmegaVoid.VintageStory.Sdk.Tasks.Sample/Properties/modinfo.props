@@ -7,6 +7,9 @@
         <RequiredOnServer>true</RequiredOnServer>
     </PropertyGroup>
     <ItemGroup>
-        <Dependency Include="game" Version="*" />
+        <Dependency Include="game" Version="*" Fetch="false" />
+        <Dependencies Include="vsimgui" Version="1.2.2" />
+        <Dependencies Include="configlib" Version="1.11.1" />
+        <Dependencies Include="insanitylib" Version="2.0.1" />
     </ItemGroup>
 </Project>

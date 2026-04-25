@@ -6,34 +6,17 @@
         <PackageId>id</PackageId>
         <Version>1.0.0</Version>
         <Title>name</Title>
-        <Authors>OmegaRogue,RolfSteiner</Authors>
+        <Authors>OmegaRogue</Authors>
         <Description>test</Description>
         <PackageProjectUrl>test.com</PackageProjectUrl>
     </PropertyGroup>
     <PropertyGroup>
         <OutputDir>bin\$(Configuration)</OutputDir>
     </PropertyGroup>
-
-    <Import Project="../OmegaVoid.VintageStory.Sdk.Tasks/build/OmegaVoid.VintageStory.Sdk.Tasks.props"/>
-    <PropertyGroup>
-        <ModID>testttt</ModID>
-        <HasInsanityLibDependency>true</HasInsanityLibDependency>
-    </PropertyGroup>
-
     <ItemGroup>
-        <CompilerVisibleProperty Include="ModID"/>
-        <CompilerVisibleProperty Include="HasInsanityLibDependency"/>
+      <Folder Include="Releases\" />
     </ItemGroup>
-
     <ItemGroup>
-        
-        <ProjectReference Include="..\OmegaVoid.VintageStory.Sdk.Tasks\OmegaVoid.VintageStory.Sdk.Tasks.csproj">
-            <Private>False</Private>
-            <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
-            <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-        </ProjectReference>
+      <PackageReference Include="OmegaVoid.VintageStory.Sdk.Tasks" Version="0.0.10" />
     </ItemGroup>
-
-    
-
 </Project>

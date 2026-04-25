@@ -21,6 +21,8 @@ public struct ModdbModRelease : IEquatable<ModdbModRelease>
     [JsonProperty("filename")] public string FileName { get; set; }
     [JsonProperty("modidstr")] public string IdString { get; set; }
     [JsonProperty("modversion")] public string Version { get; set; }
+    [JsonIgnore]
+    public bool Fetch { get; set; }
 
     public async Task DownloadDependency(string outputDir, CancellationToken cancellationToken = default)
     {

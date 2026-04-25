@@ -14,5 +14,4 @@
         <AbsoluteIntermediateOutput>$(ProjectDir)$(IntermediateOutputPath)</AbsoluteIntermediateOutput>
         <ModRefFolder>$(AbsoluteIntermediateOutput)\ModRefs\</ModRefFolder>
     </PropertyGroup>
-    
 </Project>
