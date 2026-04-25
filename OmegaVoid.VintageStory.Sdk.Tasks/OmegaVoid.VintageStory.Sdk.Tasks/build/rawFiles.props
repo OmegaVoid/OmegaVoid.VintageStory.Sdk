@@ -8,6 +8,7 @@
         &lt;GameDirectory&gt;&lt;/GameDirectory&gt;
         &lt;PackageDevBuild&gt;false&lt;/PackageDevBuild&gt;
         &lt;EnterWorldOnStartup&gt;false&lt;/EnterWorldOnStartup&gt;
+        &lt;ApiKey&gt;&lt;/ApiKey&gt;
     &lt;/PropertyGroup&gt;
 &lt;/Project&gt;
         </LocalSettingsPropsDefault>

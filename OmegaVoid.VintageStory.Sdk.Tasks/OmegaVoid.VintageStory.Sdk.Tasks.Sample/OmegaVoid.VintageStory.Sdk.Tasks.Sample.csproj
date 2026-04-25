@@ -17,6 +17,6 @@
       <Folder Include="Releases\" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="OmegaVoid.VintageStory.Sdk.Tasks" Version="0.0.13" />
+      <PackageReference Include="OmegaVoid.VintageStory.Sdk.Tasks" Version="0.0.14" />
     </ItemGroup>
 </Project>

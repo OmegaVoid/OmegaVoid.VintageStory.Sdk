@@ -8,8 +8,8 @@
     </PropertyGroup>
     <ItemGroup>
         <Dependency Include="game" Version="*" Fetch="false" />
-        <Dependency Include="vsimgui" Version="1.2.2" />
-        <Dependency Include="configlib" Version="1.11.1" />
-        <Dependency Include="insanitylib" Version="2.0.1" />
+        <Dependency Include="vsimgui" Version="1.2.2"/>
+        <Dependency Include="configlib" Version="1.11.1"/>
+        <Dependency Include="insanitylib" Version="2.0.1"/>
     </ItemGroup>
 </Project>
