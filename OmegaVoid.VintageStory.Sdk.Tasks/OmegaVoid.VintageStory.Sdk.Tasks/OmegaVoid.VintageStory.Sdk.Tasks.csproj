@@ -18,7 +18,8 @@
         <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         <PackageProjectUrl>github.com/OmegaVoid/OmegaVoid.VintageStory.Sdk</PackageProjectUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.1.0</Version>
+        <Version>0.1.1</Version>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -36,6 +37,7 @@
         <Content Include="build\jsonAssetPaths.props" PackagePath="build\" />
         <Content Include="build\rawFiles.props" PackagePath="build\" />
         <Content Include="build\vsReferences.props" PackagePath="build\" />
+        <None Include="README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 
