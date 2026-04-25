@@ -16,7 +16,7 @@
 
     <Target Name="ResolveDependencies" Condition="'@(Dependency)' != ''" BeforeTargets="ResolveReferences">
         <PropertyGroup>
-            <AbsoluteIntermediateOutput>$(ProjectDir)$(IntermediateOutputPath)</AbsoluteIntermediateOutput>
+            <AbsoluteIntermediateOutput>$(ProjectDir)\$(IntermediateOutputPath)</AbsoluteIntermediateOutput>
             <ModRefFolder>$(AbsoluteIntermediateOutput)\modDeps\</ModRefFolder>
         </PropertyGroup>
         <Dependencies Dependency="@(Dependency)" OutputDir="$(ModRefFolder)">
