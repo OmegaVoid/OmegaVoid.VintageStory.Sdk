@@ -14,7 +14,7 @@ public record Dependency(string Id, string Version, bool Fetch = true)
     [JsonIgnore]
     public bool Fetch { get; set; } = Fetch;
 
-    public Dependency(ITaskItem item) : this(item.GetMetadata("Identity"), item.GetMetadata("Version"), bool.Parse(item.GetMetadata("Fetch")))
+    public Dependency(ITaskItem item) : this(item.GetMetadata("Identity"), item.GetMetadata("Version"), string.IsNullOrEmpty(item.GetMetadata("Fetch")) || bool.Parse(item.GetMetadata("Fetch")))
     {
     }
     public Dependency(Moddb.ModdbModRelease release) : this(release.IdString, release.Version)
