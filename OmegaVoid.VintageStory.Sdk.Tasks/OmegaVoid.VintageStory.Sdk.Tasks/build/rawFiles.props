@@ -1,0 +1,29 @@
+<Project>
+    <PropertyGroup>
+        <LocalSettingsPropsDefault>
+&lt;Project&gt;
+    &lt;PropertyGroup&gt;
+        &lt;RunFormatter&gt;false&lt;/RunFormatter&gt;
+        &lt;DataFolder&gt;&lt;/DataFolder&gt;
+        &lt;GameDirectory&gt;&lt;/GameDirectory&gt;
+        &lt;PackageDevBuild&gt;false&lt;/PackageDevBuild&gt;
+        &lt;EnterWorldOnStartup&gt;false&lt;/EnterWorldOnStartup&gt;
+    &lt;/PropertyGroup&gt;
+&lt;/Project&gt;
+        </LocalSettingsPropsDefault>
+        <ModInfoPropsDefault>
+&lt;Project&gt;
+    &lt;PropertyGroup&gt;
+        &lt;Contributors&gt;fsdg&lt;/Contributors&gt;
+        &lt;ModType&gt;code&lt;/ModType&gt;
+        &lt;Side&gt;universal&lt;/Side&gt;
+        &lt;RequiredOnClient&gt;true&lt;/RequiredOnClient&gt;
+        &lt;RequiredOnServer&gt;true&lt;/RequiredOnServer&gt;
+    &lt;/PropertyGroup&gt;
+    &lt;ItemGroup&gt;
+        &lt;Dependency Include=&quot;game&quot; Version=&quot;*&quot; /&gt;
+    &lt;/ItemGroup&gt;
+&lt;/Project&gt; 
+        </ModInfoPropsDefault>
+    </PropertyGroup>
+</Project>

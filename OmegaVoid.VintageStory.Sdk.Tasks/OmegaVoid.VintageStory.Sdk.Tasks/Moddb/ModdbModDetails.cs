@@ -1,4 +1,11 @@
+using System.Collections.Frozen;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using OmegaVoid.VintageStory.Sdk.Tasks.ModInfo;
 
 namespace OmegaVoid.VintageStory.Sdk.Tasks.Moddb;
 
@@ -10,15 +17,19 @@ public struct ModdbModDetails
     [JsonProperty("author")] public string Author { get; set; }
     [JsonProperty("urlalias")] public string UrlAlias { get; set; }
     [JsonProperty("releases")] public ModdbModRelease[] Releases { get; set; }
-
     
-}
+    [JsonIgnore]
+    public ReadOnlyDictionary<Dependency, ModdbModRelease> ModReleases { get;  private set; }
+    [JsonIgnore]
+    public ReadOnlyDictionary<string, ModdbModRelease> ModReleaseVersions { get;  private set; }
 
-[JsonObject]
-public struct ModdbModDetailsPage
-{
-    [JsonProperty(PropertyName = "statuscode")]
-    public string StatusCode { get; set; }
-
-    [JsonProperty(PropertyName = "mod")] public ModdbModDetails Mods { get; set; }
+    [OnDeserialized]
+    internal void OnDeserialized(StreamingContext context)
+    {
+        ModReleases = Releases.ToDictionary(release => new Dependency(release)).AsReadOnly();
+        ModReleaseVersions = Releases.ToDictionary(release => release.Version, release => release).AsReadOnly();
+    }
+    
+    public ModdbModRelease this[Dependency dependency] => ModReleases[dependency];
+    public ModdbModRelease this[string version] => ModReleaseVersions[version];
 }

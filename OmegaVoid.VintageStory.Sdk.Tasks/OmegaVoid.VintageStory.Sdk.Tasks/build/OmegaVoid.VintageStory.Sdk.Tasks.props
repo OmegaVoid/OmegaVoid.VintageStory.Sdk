@@ -1,0 +1,29 @@
+<!-- build/OmegaVoid.VintageStory.Sdk.Tasks.props -->
+<Project TreatAsLocalProperty="TaskFolder;TaskAssembly">
+    <Import Project="$(MSBuildProjectDirectory)\Properties\localSettings.props" Condition="Exists('$(MSBuildProjectDirectory)\Properties\localSettings.props')"/>
+    <Import Project="$(MSBuildProjectDirectory)\Properties\modinfo.props" Condition="Exists('$(MSBuildProjectDirectory)\Properties\modinfo.props')"/>
+    <Import Project="$(MSBuildThisFileDirectory)\rawFiles.props"/>
+    <Import Project="$(MSBuildThisFileDirectory)\vsReferences.props"/>
+    <Import Project="$(MSBuildThisFileDirectory)\jsonAssetPaths.props"/>
+    <Import Project="$(MSBuildThisFileDirectory)\build.targets"/>
+    <Import Project="$(MSBuildThisFileDirectory)\directories.props"/>
+    
+    <ItemGroup>
+        <Folder Include="resources\assets\$(PackageId)\"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="resources\assets"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="resources\assets\" />
+    </ItemGroup>
+    
+    <PropertyGroup>
+        <TaskAssembly>$(MSBuildThisFileDirectory)..\bin\Release\net10.0\OmegaVoid.VintageStory.Sdk.Tasks.dll</TaskAssembly>
+        <ModID>$(PackageId)</ModID>
+    </PropertyGroup>
+    
+    <UsingTask TaskName="Dependencies" AssemblyFile="$(TaskAssembly)"/>
+    <UsingTask TaskName="MakeModInfo" AssemblyFile="$(TaskAssembly)"/>
+    <UsingTask TaskName="JsonFormat" AssemblyFile="$(TaskAssembly)"/>
+</Project>

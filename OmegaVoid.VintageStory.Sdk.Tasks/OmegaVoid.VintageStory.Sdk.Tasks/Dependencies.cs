@@ -6,7 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Build.Utilities;
 using OmegaVoid.VintageStory.Sdk.Tasks.Moddb;
+using OmegaVoid.VintageStory.Sdk.Tasks.ModInfo;
+using Task = System.Threading.Tasks.Task;
 
 namespace OmegaVoid.VintageStory.Sdk.Tasks;
 
@@ -14,71 +17,36 @@ using System;
 using Microsoft.Build.Framework;
 using Newtonsoft.Json;
 
-public record Dependency
-{
-    public string Id { get; }
-    public string Version { get; }
-
-    public Dependency(ITaskItem item)
-    {
-        Id = item.GetMetadata("Identity");
-        Version = item.GetMetadata("Version");
-    }
-
-    public override string ToString() => $"{Id} {Version}";
-}
-
 public class Dependencies : Microsoft.Build.Utilities.Task
 {
-    public ITaskItem[] Dependency { get; set; }
-    public string OutputDir { get; set; }
+    [Required] public ITaskItem[] Dependency { get; set; } = [];
+    [Required] public string OutputDir { get; set; } = "";
+    [Output] public ITaskItem[] ModsDownloaded { get; private set; } = [];
 
     public async Task<bool> ExecuteAsync()
     {
-        Log.LogWarning(OutputDir);
-        var client = new HttpClient();
-        client.BaseAddress = new Uri("https://mods.vintagestory.at");
-        using var response = await client.GetAsync("api/mods");
-        var content = await response.Content.ReadAsStringAsync();
-        var index = JsonConvert.DeserializeObject<ModdbModIndex>(content).Mods;
-        var deps = (from idep in Dependency let dep = new Dependency(idep) where dep.Id != "game" select dep);
-        var modd = (from mod in index
-            where mod.ModIdStrings.Intersect(deps.Select(dependency => dependency.Id)).Any()
-            select mod).ToArray();
-        var dependencyList = new Dictionary<Dependency, ModdbModDetails>();
-        foreach (var mod in modd)
+        var items = new List<ITaskItem>();
+        if (Directory.Exists(OutputDir))
+            Directory.Delete(OutputDir, true);
+        Directory.CreateDirectory(OutputDir);
+        var dependencies1 = DependencyParser.ParseDependencies(Dependency);
+        var dependencies2 = await DependencyParser.FetchModDependencies(dependencies1.Keys);
+        
+        var matchedDeps = DependencyParser.MatchDependencies(dependencies1, dependencies2);
+
+        foreach (var modRelease in matchedDeps.Select(pair => (ModdbModRelease)pair))
         {
-            using var resp = await client.GetAsync($"api/mod/{mod.ModId}");
-            var details = JsonConvert.DeserializeObject<ModdbModDetailsPage>(await resp.Content.ReadAsStringAsync())
-                .Mods;
-            var dep = deps.Where(dependency =>
-                details.Releases.Select(release => release.IdString).Any(s => s == dependency.Id)).ToArray();
-            if (dep.Length > 0)
-                dependencyList.Add(dep[0], details);
-            // Log.LogWarning(JsonConvert.SerializeObject(details));
+            await modRelease.DownloadDependency(OutputDir);
+            var path = Path.Combine(OutputDir, modRelease.FileName);
+            Log.LogMessage(MessageImportance.High,$"Downloaded {modRelease} to {Path.GetRelativePath(Directory.GetCurrentDirectory(), path)}");
+            Log.LogMessage(MessageImportance.High,$"Extracted {modRelease} to {Path.GetRelativePath(Directory.GetCurrentDirectory(), path.Replace(".zip",""))}");
+            items.Add(new TaskItem(itemSpec: path, new Dictionary<string, string> { { "ModId", modRelease.IdString }, { "Version", modRelease.Version }, { "Zip", $"{OutputDir}/{modRelease.FileName}"}, {"String",
+                ((Dependency)modRelease).ToString()} }));
         }
 
-        foreach (var depen in dependencyList)
-        {
-            ;
-            using (var webClient = new HttpClient())
-            {
-                var release = depen.Value.Releases.Where(release => release.Version == depen.Key.Version).ToArray()
-                    .First();
-                await using var downloadStream = await client.GetStreamAsync(release.MainFile);
-                await using var fileStream = new FileStream($"{OutputDir}/{release.FileName}", FileMode.Create,
-                    FileAccess.Write);
-                await ZipFile.ExtractToDirectoryAsync(downloadStream, $"{OutputDir}/{release.FileName.Replace(".zip","")}");
-            }
+        ModsDownloaded = items.ToArray();
 
-            Log.LogWarning(depen.Key.ToString());
-            Log.LogWarning(JsonConvert.SerializeObject(depen.Value));
-        }
-        // Log.LogWarning(string.Join("\n", deps));
-        // Log.LogWarning(string.Join("\n", JsonConvert.SerializeObject(modd)));
-
-
-        return true;
+        return !Log.HasLoggedErrors;
     }
 
     public override bool Execute() => Task.Run(ExecuteAsync).GetAwaiter().GetResult();

@@ -1,0 +1,9 @@
+<Project>
+    <ItemGroup>
+        <AssetsToFormat BaseDir="$(AssetsDir)" Include="$(AssetsDir)\$(PackageId)\blocktypes"/>
+        <AssetsToFormat BaseDir="$(AssetsDir)" Include="$(AssetsDir)\$(PackageId)\itemtypes"/>
+        <AssetsToFormat BaseDir="$(AssetsDir)" Include="$(AssetsDir)\$(PackageId)\patches"/>
+        <AssetsToFormat BaseDir="$(AssetsDir)" Include="$(AssetsDir)\$(PackageId)\entities"/>
+        <AssetsToFormat BaseDir="$(AssetsDir)" Include="$(AssetsDir)\$(PackageId)\config\animations"/>
+    </ItemGroup>
+</Project>
