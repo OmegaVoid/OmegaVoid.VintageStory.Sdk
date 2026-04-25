@@ -118,4 +118,7 @@
         <Delete Files="$(ReleasePathDev)"/>
         <ZipDirectory SourceDirectory="$(OutputPath)" DestinationFile="$(ReleasePathDev)"/>
     </Target>
+    <ItemGroup>
+        <Reference Include="$(ProjectDir)\$(IntermediateOutputPath)\modDeps\**\*.dll" Private="false"/>
+    </ItemGroup>
 </Project>
