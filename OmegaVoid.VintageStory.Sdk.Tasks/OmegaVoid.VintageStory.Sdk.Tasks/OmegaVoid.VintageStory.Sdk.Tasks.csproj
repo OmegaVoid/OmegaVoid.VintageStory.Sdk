@@ -18,7 +18,7 @@
         <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         <PackageProjectUrl>github.com/OmegaVoid/OmegaVoid.VintageStory.Sdk</PackageProjectUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.1.1</Version>
+        <Version>0.1.2</Version>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 

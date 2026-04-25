@@ -22,7 +22,8 @@
         &lt;RequiredOnServer&gt;true&lt;/RequiredOnServer&gt;
     &lt;/PropertyGroup&gt;
     &lt;ItemGroup&gt;
-        &lt;Dependency Include=&quot;game&quot; Version=&quot;*&quot; /&gt;
+        &lt;!-- Fetch controls whether to automatically download the mod from moddb as a dependency --&gt;
+        &lt;Dependency Include=&quot;game&quot; Version=&quot;*&quot; Fetch=&quot;false&quot;/&gt;
     &lt;/ItemGroup&gt;
 &lt;/Project&gt; 
         </ModInfoPropsDefault>
