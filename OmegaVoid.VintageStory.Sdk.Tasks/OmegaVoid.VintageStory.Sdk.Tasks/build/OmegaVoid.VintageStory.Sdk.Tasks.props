@@ -33,11 +33,13 @@
 
 
     
-    <Target Name="Vars">
-        <ReleasesDir>$(ProjectDir)\Releases</ReleasesDir>
-        <ReleaseFile>$(PackageId)_$(Version)</ReleaseFile>
-        <ReleasePath>$(ReleasesDir)\$(ReleaseFile).zip</ReleasePath>
-        <ReleasePathDev>$(ReleasesDir)\$(ReleaseFile)_dev.zip</ReleasePathDev>
+    <Target Name="Vars" BeforeTargets="ModInfo">
+        <PropertyGroup>
+            <ReleasesDir>$(ProjectDir)\Releases</ReleasesDir>
+            <ReleaseFile>$(PackageId)_$(Version)</ReleaseFile>
+            <ReleasePath>$(ReleasesDir)\$(ReleaseFile).zip</ReleasePath>
+            <ReleasePathDev>$(ReleasesDir)\$(ReleaseFile)_dev.zip</ReleasePathDev>
+        </PropertyGroup>
     </Target>
     <!-- Creating local settings file -->
     <Target Name="EnsureSettingsProps" DependsOnTargets="Vars" BeforeTargets="ModInfo" Condition="!Exists('Properties\localSettings.props')">
