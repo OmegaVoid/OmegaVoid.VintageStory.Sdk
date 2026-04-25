@@ -68,6 +68,8 @@
             <VSMods Include="%(VSMod.Folder)\lib\**\*.dll"/>
             <VSMods Include="%(VSMod.Folder)\**\*.dll" Condition=" '@(VSMods)' == '' "/>
         </ItemGroup>
+        <Message Importance="high" IsCritical="true" Text="@(VSMod)"/>
+        <Message Importance="high" IsCritical="true" Text="%(VSMod.Folder)"/>
         <ItemGroup>
             <Reference Include="@(VSMods)" Private="false"/>
         </ItemGroup>

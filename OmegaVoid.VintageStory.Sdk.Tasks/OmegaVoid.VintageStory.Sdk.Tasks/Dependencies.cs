@@ -41,7 +41,7 @@ public class Dependencies : Microsoft.Build.Utilities.Task
             var path = Path.Combine(OutputDir, modRelease.FileName);
             Log.LogMessage(MessageImportance.High,$"Downloaded {modRelease} to {Path.GetRelativePath(Directory.GetCurrentDirectory(), path)}");
             Log.LogMessage(MessageImportance.High,$"Extracted {modRelease} to {Path.GetRelativePath(Directory.GetCurrentDirectory(), path.Replace(".zip",""))}");
-            items.Add(new TaskItem(itemSpec: path, new Dictionary<string, string> { { "ModId", modRelease.IdString }, { "Version", modRelease.Version }, { "Zip", $"{OutputDir}/{modRelease.FileName}"}, {"String",
+            items.Add(new TaskItem(itemSpec: path.Replace(".zip",""), new Dictionary<string, string> { { "ModId", modRelease.IdString }, { "Version", modRelease.Version }, { "Zip", $"{OutputDir}/{modRelease.FileName}"}, {"String",
                 ((Dependency)modRelease).ToString()} }));
         }
 
