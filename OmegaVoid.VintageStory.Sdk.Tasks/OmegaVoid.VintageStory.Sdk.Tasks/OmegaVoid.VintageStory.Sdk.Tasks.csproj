@@ -12,6 +12,10 @@
         <PackageId>OmegaVoid.VintageStory.Sdk.Tasks</PackageId>
         <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
         <NoPackageAnalysis>true</NoPackageAnalysis>
+        <Title>Vintage Story Build</Title>
+        <Authors>OmegaRogue</Authors>
+        <Copyright>GPL v3.0</Copyright>
+        <PackageProjectUrl>github.com/OmegaVoid/OmegaVoid.VintageStory.Sdk</PackageProjectUrl>
     </PropertyGroup>
 
     <ItemGroup>
