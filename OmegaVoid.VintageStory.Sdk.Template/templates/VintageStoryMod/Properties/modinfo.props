@@ -1,0 +1,33 @@
+<Project>
+    <PropertyGroup>
+<!--#if (IncludeContributors)
+        <Contributors>_Contributors_</Contributors>
+#endif -->
+<!--#if (IncludeIconPath)
+        <IconPath>_IconPath_</IconPath>
+#endif -->
+<!--#if (IncludeTextureSize)
+        <TextureSize>_TextureSize_</TextureSize>
+#endif -->
+<!--#if (IncludeNetworkVersion)
+        <NetworkVersion>_NetworkVersion_</NetworkVersion>
+#endif -->
+        <ModType>_modtype_</ModType>
+        <Side>_modside_</Side>
+<!--#if (ModSide == "server")
+        <RequiredOnClient>false</RequiredOnClient>
+        <RequiredOnServer>true</RequiredOnServer>
+#elseif (ModSide == "client")
+        <RequiredOnClient>true</RequiredOnClient>
+        <RequiredOnServer>false</RequiredOnServer>
+#else
+        <RequiredOnClient>_requiredclient_</RequiredOnClient>
+        <RequiredOnServer>_requiredserver_</RequiredOnServer>
+#endif -->
+
+        
+    </PropertyGroup>
+    <ItemGroup>
+        <Dependency Include="game" Version="*" Fetch="false" />
+    </ItemGroup>
+</Project>

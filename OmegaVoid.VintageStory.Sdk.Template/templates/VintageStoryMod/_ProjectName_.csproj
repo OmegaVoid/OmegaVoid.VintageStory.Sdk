@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutputPath>bin\$(Configuration)\Mods</OutputPath>
+        <Nullable>enable</Nullable>
+        <PackageId>_modid_</PackageId>
+        <Version>_ModVersion_</Version>
+        <Title>_ProjectName_</Title>
+        <Authors>_ModAuthors_</Authors>
+        <Description>_ModDescription_</Description>
+        <PackageProjectUrl>_ModWebsite_</PackageProjectUrl>
+    </PropertyGroup>
+    <PropertyGroup>
+        <OutputDir>bin\$(Configuration)</OutputDir>
+    </PropertyGroup>
+    <ItemGroup>
+        <Folder Include="Releases\"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="OmegaVoid.VintageStory.Sdk.Tasks" Version="0.2.0"/>
+    </ItemGroup>
+</Project>

@@ -3,7 +3,7 @@
         <LocalSettingsPropsDefault>
 &lt;Project&gt;
     &lt;PropertyGroup&gt;
-        &lt;RunFormatter&gt;false&lt;/RunFormatter&gt;
+        &lt;WorldName&gt;test_$(ProjectId)&lt;/WorldName&gt;
         &lt;DataFolder&gt;&lt;/DataFolder&gt;
         &lt;GameDirectory&gt;&lt;/GameDirectory&gt;
         &lt;PackageDevBuild&gt;false&lt;/PackageDevBuild&gt;

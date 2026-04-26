@@ -1,0 +1,11 @@
+<Project>
+    <PropertyGroup>
+        <WorldName>test_$(ProjectId)</WorldName>
+        <GameDirectory>$(VINTAGE_STORY)</GameDirectory>
+        <DataFolder>_DataFolder_</DataFolder>
+        <PackageDevBuild>_PackageDevBuild_</PackageDevBuild>
+        <EnterWorldOnStartup>_EnterWorldOnStartup_</EnterWorldOnStartup>
+        <ApiKey></ApiKey>
+    </PropertyGroup>
+</Project>
+

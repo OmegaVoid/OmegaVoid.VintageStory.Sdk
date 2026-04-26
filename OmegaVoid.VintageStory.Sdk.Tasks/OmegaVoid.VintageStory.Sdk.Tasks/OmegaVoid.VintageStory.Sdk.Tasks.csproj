@@ -16,9 +16,9 @@
         <Authors>OmegaRogue</Authors>
         <Copyright>Copyright (c) OmegaRogue 2026.</Copyright>
         <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/OmegaVoid/OmegaVoid.VintageStory.Sdk</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/OmegaVoid/OmegaVoid.VintageStory.Sdk/tree/main/OmegaVoid.VintageStory.Sdk.Tasks</PackageProjectUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.1.5</Version>
+        <Version>0.2.0</Version>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/OmegaVoid/OmegaVoid.VintageStory.Sdk</RepositoryUrl>
         <RepositoryType>git</RepositoryType>

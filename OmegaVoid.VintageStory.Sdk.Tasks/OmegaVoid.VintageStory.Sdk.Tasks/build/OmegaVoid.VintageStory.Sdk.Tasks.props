@@ -77,14 +77,22 @@
 
     <Target Name="ModInfo" BeforeTargets="CopyFilesToOutput">
         <Message Text="Generating modinfo.json" Importance="high"/>
-        <MakeModInfo Authors="$(Authors)" Description="$(Description)"
-                     Version="$(Version)" ModId="$(PackageId)"
-                     Name="$(Title)" Website="$(PackageProjectUrl)"
-                     Contributors="$(Contributors)" Dependencies="@(Dependency)"
-                     ModType="$(ModType)" Side="$(Side)"
+        <MakeModInfo Authors="$(Authors)" 
+                     Description="$(Description)"
+                     Version="$(Version)" 
+                     ModId="$(PackageId)"
+                     Name="$(Title)" 
+                     Website="$(PackageProjectUrl)"
+                     Contributors="$(Contributors)" 
+                     Dependencies="@(Dependency)"
+                     ModType="$(ModType)" 
+                     Side="$(Side)"
                      RequiredOnClient="$(RequiredOnClient)"
                      RequiredOnServer="$(RequiredOnServer)"
-                     FilePath="$(OutputPath)/modinfo.json"/>
+                     FilePath="$(OutputPath)/modinfo.json" 
+                     IconPath="$(IconPath)" 
+                     TextureSize="$(TextureSize)" 
+                     NetworkVersion="$(NetworkVersion)"/>
     </Target>
 
 

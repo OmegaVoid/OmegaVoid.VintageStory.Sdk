@@ -1,0 +1,232 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "OmegaRogue",
+  "classifications": [
+    "Games",
+    "Vintage Story"
+  ],
+  "name": "Vintage Story Mod (OmegaVoid Build)",
+  "description": "A template for a VintageStory mod",
+  "precedence": "0",
+  "identity": "OmegaVoid.VintageStory.Sdk.Template",
+  "shortName": "vsmod-omegavoid",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "_ProjectName_",
+  "symbols": {
+    "vsInstall": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "The directory of the Vintage Story installation to use for references and Client/Server launcher.",
+      "defaultValue": "$(VINTAGE_STORY)",
+      "replaces": "$(VINTAGE_STORY)",
+      "displayName": "Location of the Vintage Story Installation",
+      "isRequired": true
+    },
+    "AddSampleCode": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Adds sample code to the template mod",
+      "defaultValue": "false",
+      "displayName": "Add Sample Code"
+    },
+    "AddSolutionFile": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Adds .slnx file for the mod (Visual Studio and Rider will automatically do that)",
+      "defaultValue": "false",
+      "displayName": "Add a Solution file"
+    },
+    "ModIdLowercase": {
+      "type": "generated",
+      "generator": "casing",
+      "parameters": {
+        "source":"name",
+        "toLower": true
+      },
+      "replaces": "_modid_",
+      "fileRename": "_modid_"
+    },
+    "ModVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "The version of this mod",
+      "defaultValue": "1.0.0",
+      "replaces": "_ModVersion_",
+      "displayName": "Mod Version",
+      "isRequired": true
+    },
+    "ModAuthors": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "The Authors of the mod, comma separated",
+      "defaultValue": "Unknown",
+      "replaces": "_ModAuthors_",
+      "displayName": "Mod Authors (Comma separated)",
+      "isRequired": true
+    },
+    "ModDescription": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "The Description of the mod",
+      "defaultValue": "To be added",
+      "replaces": "_ModDescription_",
+      "displayName": "Mod Description"
+    },
+    "ModWebsite": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "The mods homepage",
+      "defaultValue": "",
+      "replaces": "_ModWebsite_",
+      "displayName": "Mod Website"
+    },
+    "ModSide": {
+      "type": "parameter",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "server",
+          "description": "For server side things only."
+        },
+        {
+          "choice": "client",
+          "description": "For client side things only."
+        },
+        {
+          "choice": "universal",
+          "description": "For server and client side things."
+        }
+      ],
+      "defaultValue": "universal",
+      "replaces": "_modside_",
+      "displayName": "App Side"
+    },
+    "ModType": {
+      "type": "parameter",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "theme",
+          "description": "For server side things only."
+        },
+        {
+          "choice": "content",
+          "description": "For client side things only."
+        },
+        {
+          "choice": "code",
+          "description": "For server and client side things."
+        }
+      ],
+      "defaultValue": "code",
+      "replaces": "_modtype_",
+      "displayName": "Mod Type"
+    },
+    "RequiredOnServer":{
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": true,
+      "description": "Is this required on servers? (only used when App Side is set to universal)",
+      "isEnabled": "ModSide == \"universal\"",
+      "replaces": "_requiredserver_",
+      "displayName": "Required on Server"
+    },
+    "RequiredOnClient":{
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": true,
+      "description": "Is this required on clients? (only used when App Side is set to universal)",
+      "isEnabled": "ModSide == \"universal\"",
+      "replaces": "_requiredclient_",
+      "displayName": "Required on Client"
+    },
+    "IncludeContributors": {
+      "type": "computed",
+      "value": "(Contributors != \"\")"
+    },
+    "IncludeIconPath": {
+      "type": "computed",
+      "value": "(IconPath != \"\")"
+    },
+    "IncludeTextureSize": {
+      "type": "computed",
+      "value": "(TextureSize != 0)"
+    },
+    "IncludeNetworkVersion": {
+      "type": "computed",
+      "value": "(NetworkVersion != \"\")"
+    },
+    "Contributors": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "Comma separated list of Contributors",
+      "defaultValue": "",
+      "replaces": "_Contributors_",
+      "displayName": "Mod Contributors (Comma separated)"
+    },
+    "IconPath": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "Path to the icon for this mod, always relative to the mod root. If this is not specified, the game will try to use \"modicon.png\" within the mod root, and fall back to a default icon if that can also not be found.",
+      "defaultValue": "",
+      "replaces": "_IconPath_",
+      "displayName": "Icon Path"
+    },
+    "NetworkVersion": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "The network version of this mod.\nChange this number when a user that has an older version of your mod should not be allowed to connected to server with a newer version.\nDefault value is the version. ",
+      "defaultValue": "",
+      "replaces": "_NetworkVersion_",
+      "displayName": "Network Compatible Version",
+    },
+    "TextureSize": {
+      "type": "parameter",
+      "datatype": "int",
+      "description": "If the mod is a texture pack that changes topsoil grass textures, define the texture size here. Default value = 32",
+      "defaultValue": "",
+      "replaces": "_TextureSize_",
+      "displayName": "Texture Size"
+    },
+    "PackageDevBuild": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Package development builds",
+      "defaultValue": false,
+      "replaces": "_PackageDevBuild_",
+      "displayName": "Package Dev Builds"
+    },
+    "EnterWorldOnStartup": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "Load a world on startup",
+      "defaultValue": false,
+      "replaces": "_EnterWorldOnStartup_",
+      "displayName": "Enter World on Startup"
+    },
+    "DataFolder": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "Specify an alternative location for vintage story data",
+      "defaultValue": "$(GameDirectory)/VintagestoryData",
+      "replaces": "_DataFolder_",
+      "displayName": "Vintage Story Data Folder"
+    }
+  },
+  "sources": [
+    {
+      "source": "./",
+      "target": "./"
+    },
+    {
+      "condition": "(!AddSolutionFile)",
+      "exclude": [
+        "_ProjectName_.slnx"
+      ]
+    }
+  ],
+  "placeholderFilename": "-.-"
+}
