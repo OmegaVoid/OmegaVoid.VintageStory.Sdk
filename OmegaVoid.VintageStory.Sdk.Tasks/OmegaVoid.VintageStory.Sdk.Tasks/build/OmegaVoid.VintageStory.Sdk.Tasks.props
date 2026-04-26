@@ -27,9 +27,9 @@
         <ModID>$(PackageId)</ModID>
     </PropertyGroup>
     
-    <UsingTask TaskName="Dependencies" AssemblyFile="$(TaskAssembly)"/>
-    <UsingTask TaskName="MakeModInfo" AssemblyFile="$(TaskAssembly)"/>
-    <UsingTask TaskName="JsonFormat" AssemblyFile="$(TaskAssembly)"/>
+    <UsingTask TaskName="Dependencies" AssemblyFile="$(TaskAssembly)" Architecture="*" Runtime="CurrentRuntime"/>
+    <UsingTask TaskName="MakeModInfo" AssemblyFile="$(TaskAssembly)" Architecture="*" Runtime="CurrentRuntime"/>
+    <UsingTask TaskName="JsonFormat" AssemblyFile="$(TaskAssembly)" Architecture="*" Runtime="CurrentRuntime"/>
 
 
     
