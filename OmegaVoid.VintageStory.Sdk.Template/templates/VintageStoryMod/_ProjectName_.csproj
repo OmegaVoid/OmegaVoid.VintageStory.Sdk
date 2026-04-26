@@ -10,6 +10,8 @@
         <Authors>_ModAuthors_</Authors>
         <Description>_ModDescription_</Description>
         <PackageProjectUrl>_ModWebsite_</PackageProjectUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IsPackable>true</IsPackable>
     </PropertyGroup>
     <PropertyGroup>
         <OutputDir>bin\$(Configuration)</OutputDir>
