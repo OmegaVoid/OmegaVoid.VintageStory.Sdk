@@ -4,7 +4,11 @@
       "commandName": "Executable",
       "executablePath": "dotnet",
       "commandLineArgs": "nuget push ../$(PackageId).$(Version).nupkg --api-key $(ApiKey) --source https://api.nuget.org/v3/index.json"
-      
+    },
+    "PushDev": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "nuget push ../$(PackageId).$(Version).nupkg --api-key $(ApiKeyGithub) --source https://nuget.pkg.github.com/OmegaVoid/index.json",
     }
   }
 }

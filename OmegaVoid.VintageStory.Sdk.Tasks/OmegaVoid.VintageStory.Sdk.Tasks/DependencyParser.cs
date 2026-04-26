@@ -23,7 +23,7 @@ public static class DependencyParser
             let dep = new Dependency(idep)
             where dep.Id != "game"
             select new KeyValuePair<string, Dependency>(dep.Id, dep);
-        return deps.ToDictionary();
+        return deps.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
     }
 
     public static async Task<Dictionary<Dependency, ModdbModDetails>> FetchModDependencies(
@@ -46,7 +46,7 @@ public static class DependencyParser
         Dictionary<string, Dependency> dependencies1, Dictionary<Dependency, ModdbModDetails> dependencies2)
     {
         var foo = from dependency in dependencies2 where dependencies1.ContainsValue(dependency.Key) select dependency;
-        return foo.ToDictionary();
+        return foo.ToDictionary(x => x.Key, x => x.Value);
     }
 
     public static async Task DownloadDependency(KeyValuePair<Dependency, ModdbModDetails> dependency, string outputDir, CancellationToken cancellationToken = default)

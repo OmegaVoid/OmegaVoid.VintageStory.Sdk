@@ -27,11 +27,10 @@
         <ModID>$(PackageId)</ModID>
     </PropertyGroup>
     
-    <UsingTask TaskName="Dependencies" AssemblyFile="$(TaskAssembly)" Architecture="*" Runtime="CurrentRuntime"/>
-    <UsingTask TaskName="MakeModInfo" AssemblyFile="$(TaskAssembly)" Architecture="*" Runtime="CurrentRuntime"/>
-    <UsingTask TaskName="JsonFormat" AssemblyFile="$(TaskAssembly)" Architecture="*" Runtime="CurrentRuntime"/>
-
-
+    <UsingTask TaskName="Dependencies" AssemblyFile="$(TaskAssembly)" Architecture="x64" Runtime="NET"/>
+    <UsingTask TaskName="MakeModInfo" AssemblyFile="$(TaskAssembly)" Architecture="x64" Runtime="NET"/>
+    <UsingTask TaskName="JsonFormat" AssemblyFile="$(TaskAssembly)" Architecture="x64" Runtime="NET"/>
+    
     
     <Target Name="Vars" BeforeTargets="ModInfo">
         <PropertyGroup>
@@ -61,18 +60,7 @@
             <AbsoluteIntermediateOutput>$(ProjectDir)\$(IntermediateOutputPath)</AbsoluteIntermediateOutput>
             <ModRefFolder>$(AbsoluteIntermediateOutput)\modDeps\</ModRefFolder>
         </PropertyGroup>
-        <Dependencies Dependency="@(Dependency)" OutputDir="$(ModRefFolder)">
-            <Output TaskParameter="ModsDownloaded" ItemName="VSMod"/>
-        </Dependencies>
-        <ItemGroup>
-            <VSMods Include="%(VSMod.Folder)\lib\**\*.dll"/>
-            <VSMods Include="%(VSMod.Folder)\**\*.dll" Condition=" '@(VSMods)' == '' "/>
-        </ItemGroup>
-        <Message Importance="high" IsCritical="true" Text="@(VSMod)"/>
-        <Message Importance="high" IsCritical="true" Text="%(VSMod.Folder)"/>
-        <ItemGroup>
-            <Reference Include="@(VSMods)" Private="false"/>
-        </ItemGroup>
+        <Dependencies Dependency="@(Dependency)" OutputDir="$(ModRefFolder)"/>
     </Target>
 
     <Target Name="ModInfo" BeforeTargets="CopyFilesToOutput">

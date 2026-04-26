@@ -17,19 +17,22 @@ public struct ModdbModDetails
     [JsonProperty("author")] public string Author { get; set; }
     [JsonProperty("urlalias")] public string UrlAlias { get; set; }
     [JsonProperty("releases")] public ModdbModRelease[] Releases { get; set; }
-    
-    [JsonIgnore]
-    public ReadOnlyDictionary<Dependency, ModdbModRelease> ModReleases { get;  private set; }
-    [JsonIgnore]
-    public ReadOnlyDictionary<string, ModdbModRelease> ModReleaseVersions { get;  private set; }
+
+    [JsonIgnore] public ReadOnlyDictionary<Dependency, ModdbModRelease> ModReleases { get; private set; }
+    [JsonIgnore] public ReadOnlyDictionary<string, ModdbModRelease> ModReleaseVersions { get; private set; }
 
     [OnDeserialized]
     internal void OnDeserialized(StreamingContext context)
     {
+#if NETSTANDARD2_0_OR_GREATER
+        ModReleases = new ReadOnlyDictionary<Dependency, ModdbModRelease>(Releases.ToDictionary(release => new Dependency(release)));
+        ModReleaseVersions = new ReadOnlyDictionary<string, ModdbModRelease>(Releases.ToDictionary(release => release.Version, release => release));
+#else
         ModReleases = Releases.ToDictionary(release => new Dependency(release)).AsReadOnly();
         ModReleaseVersions = Releases.ToDictionary(release => release.Version, release => release).AsReadOnly();
+#endif
     }
-    
+
     public ModdbModRelease this[Dependency dependency] => ModReleases[dependency];
     public ModdbModRelease this[string version] => ModReleaseVersions[version];
 }

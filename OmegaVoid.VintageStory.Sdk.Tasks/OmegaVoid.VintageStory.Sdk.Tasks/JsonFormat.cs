@@ -18,15 +18,20 @@ public class JsonFormat : Microsoft.Build.Utilities.Task
 
     public async Task FormatFile(string fileName, string outputPath)
     {
+#if NETSTANDARD2_0_OR_GREATER
+        var text = File.ReadAllText(fileName);
+#else
         var text = await File.ReadAllTextAsync(fileName);
-        text = string.Join("\n", text.Split("\n").Where(s => !s.StartsWith("//")));
+#endif
+        text = string.Join("\n", text.Split('\n').Where(s => !s.StartsWith("//")));
 
         // Source - https://stackoverflow.com/a/71129244
         // Posted by huha, modified by community. See post 'Timeline' for change history
         // Retrieved 2026-04-25, License - CC BY-SA 4.0
 
         var config = JObject.Parse(text);
-        using var fs = File.Open(Path.Combine(outputPath, Path.GetFileName(fileName.Replace("json5","json"))), FileMode.Create);
+        using var fs = File.Open(Path.Combine(outputPath, Path.GetFileName(fileName.Replace("json5", "json"))),
+            FileMode.Create);
         using var sw = new StreamWriter(fs);
         using var jw = new JsonTextWriter(sw);
 
@@ -46,7 +51,7 @@ public class JsonFormat : Microsoft.Build.Utilities.Task
                 ? taskItem.ItemSpec
                 : Path.Combine(OutputPath, Path.GetRelativePath(taskItem.GetMetadata("BaseDir"), taskItem.ItemSpec));
             // Log.LogMessage(MessageImportance.High,
-                // $"Searching Files in {taskItem.ItemSpec}\nOutput Path: {OutputPath}\nTarget Path: {targetPath}");
+            // $"Searching Files in {taskItem.ItemSpec}\nOutput Path: {OutputPath}\nTarget Path: {targetPath}");
             if (!Directory.Exists(taskItem.ItemSpec))
                 continue;
             if (!Directory.Exists(targetPath))

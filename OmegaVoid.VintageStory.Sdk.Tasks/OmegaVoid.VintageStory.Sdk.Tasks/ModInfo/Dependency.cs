@@ -8,8 +8,13 @@ namespace OmegaVoid.VintageStory.Sdk.Tasks.ModInfo;
 
 public record Dependency(string Id, string Version, bool Fetch = true)
 {
+#if NETSTANDARD2_0_OR_GREATER
+    public string Id { get; private set; } = Id;
+    public string Version { get; private set; } = Version;
+#else
     public string Id { get; init; } = Id;
     public string Version { get; init; } = Version;
+#endif
 
     [JsonIgnore]
     public bool Fetch { get; set; } = Fetch;

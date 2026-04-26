@@ -10,19 +10,20 @@ public record ModInfo
 {
     [JsonProperty] public List<string> Authors { get; set; } = [];
 
-    
-    
+
+
     [JsonRequired]
-    [JsonConverter(typeof(StringEnumConverter), typeof(CamelCaseNamingStrategy))]
-    public ModType Type { get; set; }
+    [JsonProperty("type")]
+    // [JsonConverter(typeof(StringEnumConverter), typeof(CamelCaseNamingStrategy))]
+    public string ModType { get; set; } = "code";
 
     [JsonRequired] public string Name { get; set; } = "";
     [JsonProperty] public string Version { get; set; } = "";
     [JsonProperty] public string? Description { get; set; }
 
     [JsonProperty]
-    [JsonConverter(typeof(StringEnumConverter), typeof(CamelCaseNamingStrategy))]
-    public AppSide Side { get; set; } = AppSide.Universal;
+    // [JsonConverter(typeof(StringEnumConverter), typeof(CamelCaseNamingStrategy))]
+    public string Side { get; set; } = "universal";
 
     [JsonProperty] public bool RequiredOnClient { get; set; } = true;
     [JsonProperty] public bool RequiredOnServer { get; set; } = true;
