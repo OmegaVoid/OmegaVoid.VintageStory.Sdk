@@ -17,7 +17,7 @@
         <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/OmegaVoid/OmegaVoid.VintageStory.Sdk/tree/main/OmegaVoid.VintageStory.Sdk.Tasks</PackageProjectUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.2.4</Version>
+        <Version>0.3.0-alpha999902</Version>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/OmegaVoid/OmegaVoid.VintageStory.Sdk</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
@@ -25,6 +25,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
         <PackageReference Include="Microsoft.Build.Tasks.Core" Version="18.4.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1" />
 
@@ -34,9 +35,6 @@
     <ItemGroup>
         <!-- pack the props files -->
         <Content Include="build\OmegaVoid.VintageStory.Sdk.Tasks.props" PackagePath="build\" />
-        <Content Include="build\build.targets" PackagePath="build\" />
-        <Content Include="build\directories.props" PackagePath="build\" />
-        <Content Include="build\jsonAssetPaths.props" PackagePath="build\" />
         <Content Include="build\rawFiles.props" PackagePath="build\" />
         <Content Include="build\vsReferences.props" PackagePath="build\" />
         <None Include="README.md" Pack="true" PackagePath="\"/>

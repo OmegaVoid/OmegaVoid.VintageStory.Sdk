@@ -13,5 +13,5 @@ public enum AppSide
     /// <summary>For client side things only.</summary>
     Client = 2,
     /// <summary>For server and client side things.</summary>
-    Universal = Client | Server, // 0x00000003
+    Universal = Client | Server
 }

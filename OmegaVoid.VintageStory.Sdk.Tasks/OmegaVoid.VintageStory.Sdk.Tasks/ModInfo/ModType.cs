@@ -11,10 +11,12 @@ public enum ModType
     /// game or mod assets / content without adding new content or code.
     /// </summary>
     Theme,
+
     /// <summary>
     /// Can modify any existing assets, or add new content, but no code.
     /// </summary>
     Content,
+
     /// <summary>
     /// Can modify existing assets, add new content and make use of C#
     /// source files (.cs) and pre-compiled assemblies (.dll).

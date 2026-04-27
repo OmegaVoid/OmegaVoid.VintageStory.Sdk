@@ -1,21 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 using Microsoft.Build.Framework;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using OmegaVoid.VintageStory.Sdk.Tasks.Moddb;
+using OmegaVoid.VintageStory.Sdk.Tasks.ModDB;
 using OmegaVoid.VintageStory.Sdk.Tasks.ModInfo;
 
 namespace OmegaVoid.VintageStory.Sdk.Tasks;
 
 public static class DependencyParser
 {
-    public static readonly HttpClient Client = new HttpClient { BaseAddress = new Uri("https://mods.vintagestory.at") };
+    public static readonly HttpClient Client = new() { BaseAddress = new Uri("https://mods.vintagestory.at") };
 
     public static Dictionary<string, Dependency> ParseDependencies(ITaskItem[] dependencies)
     {
@@ -26,15 +24,15 @@ public static class DependencyParser
         return deps.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
     }
 
-    public static async Task<Dictionary<Dependency, ModdbModDetails>> FetchModDependencies(
+    public static async Task<Dictionary<Dependency, ModDBModDetails>> FetchModDependencies(
         IEnumerable<string> dependencies)
     {
-        var dependencyList = new Dictionary<Dependency, ModdbModDetails>();
+        var dependencyList = new Dictionary<Dependency, ModDBModDetails>();
         foreach (var mod in dependencies)
         {
             using var resp = await Client.GetAsync($"api/mod/{mod}");
-            var details = JsonConvert.DeserializeObject<ModdbModDetailsPage>(await resp.Content.ReadAsStringAsync())
-                .Mods;
+            var details = JsonConvert.DeserializeObject<ModDBModDetailsPage>(await resp.Content.ReadAsStringAsync())
+                .Mod;
             foreach (var release in details.Releases)
                 dependencyList.Add((Dependency)release, details);
         }
@@ -42,22 +40,20 @@ public static class DependencyParser
         return dependencyList;
     }
 
-    public static Dictionary<Dependency, ModdbModDetails> MatchDependencies(
-        Dictionary<string, Dependency> dependencies1, Dictionary<Dependency, ModdbModDetails> dependencies2)
+    public static Dictionary<Dependency, ModDBModDetails> MatchDependencies(
+        Dictionary<string, Dependency> dependencies1, Dictionary<Dependency, ModDBModDetails> dependencies2)
     {
         var foo = from dependency in dependencies2 where dependencies1.ContainsValue(dependency.Key) select dependency;
         return foo.ToDictionary(x => x.Key, x => x.Value);
     }
 
-    public static async Task DownloadDependency(KeyValuePair<Dependency, ModdbModDetails> dependency, string outputDir, CancellationToken cancellationToken = default)
+    public static async Task DownloadDependency(KeyValuePair<Dependency, ModDBModDetails> dependency, string outputDir,
+        string? dependencyDir = null, CancellationToken cancellationToken = default) =>
+        await ((ModDBModRelease)dependency).DownloadDependency(outputDir, dependencyDir, cancellationToken);
+
+
+    extension(KeyValuePair<Dependency, ModDBModDetails> pair)
     {
-        await ((ModdbModRelease)dependency).DownloadDependency(outputDir, cancellationToken);
+        public ModDBModRelease GetRelease() => pair.Value[pair.Key];
     }
-
-
-    extension(KeyValuePair<Dependency, ModdbModDetails> pair)
-    {
-        public ModdbModRelease GetRelease() => pair.Value[pair.Key];
-    }
-
 }

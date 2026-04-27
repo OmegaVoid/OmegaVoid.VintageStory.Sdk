@@ -1,51 +1,71 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Build.Utilities;
-using OmegaVoid.VintageStory.Sdk.Tasks.Moddb;
+using OmegaVoid.VintageStory.Sdk.Tasks.ModDB;
 using OmegaVoid.VintageStory.Sdk.Tasks.ModInfo;
-using Task = System.Threading.Tasks.Task;
+using Microsoft.Build.Framework;
 
 namespace OmegaVoid.VintageStory.Sdk.Tasks;
 
-using System;
-using Microsoft.Build.Framework;
-using Newtonsoft.Json;
-
-public class Dependencies : Microsoft.Build.Utilities.Task
+[UsedImplicitly]
+public class Dependencies : BuildTask
 {
-    [Required] public ITaskItem[] Dependency { get; set; } = [];
-    [Required] public string OutputDir { get; set; } = "";
-    [Output] public ITaskItem[] ModsDownloaded { get; private set; } = [];
+    #region Params
 
-    public async Task<bool> ExecuteAsync()
+    [RequiredImplicit] public required ITaskItem[] Dependency { get; set; }
+    [RequiredImplicit] public required string OutputDir { get; set; }
+    [RequiredImplicit] public required string DependencyDir { get; set; }
+    [UsedImplicitly] [Output] public ITaskItem[] ModsDownloaded { get; private set; } = [];
+
+    #endregion
+
+    private async Task<bool> ExecuteAsync()
     {
-        var items = new List<ITaskItem>();
-        if (Directory.Exists(OutputDir))
-            Directory.Delete(OutputDir, true);
-        Directory.CreateDirectory(OutputDir);
-        var dependencies1 = DependencyParser.ParseDependencies(Dependency);
-        dependencies1 = dependencies1.Where(pair => pair.Value.Fetch).ToDictionary();
-        var dependencies2 = await DependencyParser.FetchModDependencies(dependencies1.Keys);
-        
-        var matchedDeps = DependencyParser.MatchDependencies(dependencies1, dependencies2);
-
-        foreach (var modRelease in matchedDeps.Select(pair => (ModdbModRelease)pair))
+        try
         {
-            await modRelease.DownloadDependency(OutputDir);
-            var path = Path.Combine(OutputDir, modRelease.FileName);
-            Log.LogMessage(MessageImportance.High,$"Downloaded {modRelease} to {Path.GetRelativePath(Directory.GetCurrentDirectory(), path)}");
-            Log.LogMessage(MessageImportance.High,$"Extracted {modRelease} to {Path.GetRelativePath(Directory.GetCurrentDirectory(), path.Replace(".zip",""))}");
-            items.Add(new TaskItem(itemSpec: path.Replace(".zip",""), new Dictionary<string, string> { { "ModId", modRelease.IdString }, { "Version", modRelease.Version }, { "Zip", $"{OutputDir}/{modRelease.FileName}"}, {"String",
-                ((Dependency)modRelease).ToString()}, {"Folder", path.Replace(".zip","")} }));
-        }
+            var items = new List<ITaskItem>();
+            if (Directory.Exists(OutputDir))
+                Directory.Delete(OutputDir, true);
+            Directory.CreateDirectory(OutputDir);
+            if (Directory.Exists(DependencyDir))
+                Directory.Delete(DependencyDir, true);
+            Directory.CreateDirectory(DependencyDir);
+            var dependencies1 = DependencyParser.ParseDependencies(Dependency);
+            dependencies1 = dependencies1.Where(pair => pair.Value.Fetch).ToDictionary();
+            var dependencies2 = await DependencyParser.FetchModDependencies(dependencies1.Keys);
 
-        ModsDownloaded = items.ToArray();
+            var matchedDeps = DependencyParser.MatchDependencies(dependencies1, dependencies2);
+
+            foreach (var modRelease in matchedDeps.Select(pair => (ModDBModRelease)pair))
+            {
+                await modRelease.DownloadDependency(OutputDir, DependencyDir);
+                var path = Path.Combine(OutputDir, modRelease.FileName);
+                var path2 = Path.Combine(DependencyDir, modRelease.FileName);
+                Log.LogMessage(MessageImportance.High,
+                    $"Downloaded {modRelease} to {Path.GetRelativePath(Directory.GetCurrentDirectory(), path2)}");
+                Log.LogMessage(MessageImportance.High,
+                    $"Extracted {modRelease} to {Path.GetRelativePath(Directory.GetCurrentDirectory(), path.Replace(".zip", ""))}");
+                items.Add(new TaskItem(itemSpec: path.Replace(".zip", ""), new Dictionary<string, string>
+                {
+                    { "ModId", modRelease.IdString }, { "Version", modRelease.Version }, { "Zip", path2 },
+                    {
+                        "String",
+                        ((Dependency)modRelease).ToString()
+                    },
+                    { "Folder", path.Replace(".zip", "") }
+                }));
+            }
+
+            ModsDownloaded = items.ToArray();
+        }
+        catch (Exception e)
+        {
+            var dependencies = string.Join("\n\t",Dependency.Select(item => new Dependency(item).ToString()));
+            Log.LogError("Task Dependencies was called with OutputDir = {0}, DependencyDir = {1} on dependencies:\n\t{2}", OutputDir, DependencyDir, dependencies);
+            Log.LogErrorFromException(e, true, true, "Dependencies.cs");
+        }
 
         return !Log.HasLoggedErrors;
     }
