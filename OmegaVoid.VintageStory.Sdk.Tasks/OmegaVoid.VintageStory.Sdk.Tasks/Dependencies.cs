@@ -33,15 +33,20 @@ public class Dependencies : BuildTask
                 Directory.Delete(DependencyDir, true);
             Directory.CreateDirectory(DependencyDir);
             var dependencies1 = DependencyParser.ParseDependencies(Dependency);
-            dependencies1 = dependencies1.Where(pair => pair.Value.Fetch).ToDictionary();
+            foreach (var item in dependencies1)
+                Log.LogMessage(MessageImportance.High, $"dep {item.Value}");
+            // dependencies1 = dependencies1.Where(pair => pair.Value.Fetch).ToDictionary();
             var dependencies2 = await DependencyParser.FetchModDependencies(dependencies1.Keys);
-
+            foreach (var item in dependencies2)
+                Log.LogMessage(MessageImportance.High, $"dep2 {item.Key}");
             var matchedDeps = DependencyParser.MatchDependencies(dependencies1, dependencies2);
-
-            foreach (var modRelease in matchedDeps.Select(pair => pair))
-            {
-                var release = (ModDBModRelease)modRelease;
-                await modRelease.DownloadDependency(OutputDir, DependencyDir);
+            var matchedDeps2 = dependencies1.ToDictionary(pair => pair.Value, pair => dependencies2[pair.Value][pair.Value] );
+            foreach (var modRelease in matchedDeps2)
+            { 
+                Log.LogMessage(MessageImportance.High, $"dep5 {modRelease.Key}");
+                var release = modRelease.Value;
+                
+                await modRelease.DownloadDependency(OutputDir, DependencyDir, helper: Log);
                 var path = Path.Combine(OutputDir, release.FileName);
                 var path2 = Path.Combine(DependencyDir, release.FileName);
                 Log.LogMessage(MessageImportance.High,

@@ -29,7 +29,7 @@ public class JsonFormat : BuildTask
         // Source - https://stackoverflow.com/a/71129244
         // Posted by huha, modified by community. See post 'Timeline' for change history
         // Retrieved 2026-04-25, License - CC BY-SA 4.0
-        var outFileName = fileName.Replace(outputPath, OutputPath).Replace("json5", "json");
+        var outFileName = fileName.Replace(outputPath, OutputPath).Replace("json5", "json").Replace("yaml", "json");
         var outDir = outFileName.Replace(Path.GetFileName(outFileName), "");
         if (!Directory.Exists(outDir)) Directory.CreateDirectory(outDir);
         var config = JObject.Parse(text);
@@ -63,7 +63,8 @@ public class JsonFormat : BuildTask
                 if (!Directory.Exists(targetPath))
                     Directory.CreateDirectory(targetPath);
                 foreach (var file in Directory.EnumerateFiles(taskItem.ItemSpec, "*.json*",
-                             SearchOption.AllDirectories))
+                             SearchOption.AllDirectories).Concat(Directory.EnumerateFiles(taskItem.ItemSpec, "*.yaml",
+                             SearchOption.AllDirectories)))
                 {
                     Log.LogMessage(MessageImportance.High, $"Processing file {file}");
                     await FormatFile(file, taskItem.GetMetadata("BaseDir"));

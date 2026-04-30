@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Build.Framework;
@@ -20,6 +21,17 @@ public record Dependency(string Id, string Version, bool Fetch = true)
     }
 
     public override string ToString() => string.IsNullOrEmpty(Version) ? Id : $"{Id}@{Version}";
+
+    public virtual bool Equals(Dependency? other)
+    {
+        if (other is null) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return Id == other.Id && Version == other.Version;
+    }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id, Version);
+    }
 }
 
 public class DependenciesConverter : JsonConverter

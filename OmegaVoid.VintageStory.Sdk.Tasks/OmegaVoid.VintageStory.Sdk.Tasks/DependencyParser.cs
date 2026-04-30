@@ -8,9 +8,11 @@ using System.Net.Http;
 using System.Runtime.InteropServices.Swift;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Build.Utilities;
 using Newtonsoft.Json;
 using OmegaVoid.VintageStory.Sdk.Tasks.ModDB;
 using OmegaVoid.VintageStory.Sdk.Tasks.ModInfo;
+using Task = System.Threading.Tasks.Task;
 
 namespace OmegaVoid.VintageStory.Sdk.Tasks;
 
@@ -46,7 +48,7 @@ public static class DependencyParser
     public static Dictionary<Dependency, ModDBModDetails> MatchDependencies(
         Dictionary<string, Dependency> dependencies1, Dictionary<Dependency, ModDBModDetails> dependencies2)
     {
-        var foo = from dependency in dependencies2 where dependencies1.ContainsValue(dependency.Key) select dependency;
+        var foo = dependencies2.Where(dependency => dependencies1.ContainsValue(dependency.Key));
         return foo.ToDictionary(x => x.Key, x => x.Value);
     }
 
@@ -59,8 +61,15 @@ public static class DependencyParser
     {
         public ModDBModRelease GetRelease() => pair.Value[pair.Key];
         
-        public async Task DownloadDependency(string outputDir, string? dependencyDir = null,
+        public async Task DownloadDependency(string outputDir, string? dependencyDir = null, TaskLoggingHelper? helper = null, 
             CancellationToken cancellationToken = default) =>
-            await ((ModDBModRelease)pair).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, cancellationToken);
+            await ((ModDBModRelease)pair).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, helper, cancellationToken);
+    }
+    
+    extension(KeyValuePair<Dependency, ModDBModRelease> pair)
+    {
+        public async Task DownloadDependency(string outputDir, string? dependencyDir = null, TaskLoggingHelper? helper = null, 
+            CancellationToken cancellationToken = default) =>
+            await (pair.Value).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, helper, cancellationToken);
     }
 }

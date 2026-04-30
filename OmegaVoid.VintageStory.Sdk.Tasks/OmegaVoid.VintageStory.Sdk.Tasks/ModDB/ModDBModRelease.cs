@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 using Newtonsoft.Json;
 using OmegaVoid.VintageStory.Sdk.Tasks.ModInfo;
+using Task = System.Threading.Tasks.Task;
 
 
 namespace OmegaVoid.VintageStory.Sdk.Tasks.ModDB;
@@ -20,9 +22,11 @@ public struct ModDBModRelease : IEquatable<ModDBModRelease>
     [JsonProperty("modidstr")] public string IdString { get; set; }
     [JsonProperty("modversion")] public string Version { get; set; }
 
-    public async Task DownloadDependency(string outputDir, string? dependencyDir = null, bool fetch = true,
+    public async Task DownloadDependency(string outputDir, string? dependencyDir = null, bool fetch = true, TaskLoggingHelper? log = null, 
         CancellationToken cancellationToken = default)
     {
+        log?.LogMessage(MessageImportance.High, "DownloadDependency file {0}", FileName);
+
         dependencyDir ??= Path.Combine(outputDir, "Mods");
         var filePath = Path.Combine(outputDir, FileName.Replace(".zip", ""));
         await using var downloadStream = await DependencyParser.Client.GetStreamAsync(MainFile, cancellationToken);
@@ -30,8 +34,16 @@ public struct ModDBModRelease : IEquatable<ModDBModRelease>
             FileAccess.Write | FileAccess.Read);
         await downloadStream.CopyToAsync(fileStream, cancellationToken);
         await fileStream.FlushAsync(cancellationToken);
+        log?.LogMessage(MessageImportance.High, "downloading file {0}", FileName);
         if (fetch)
+        {
+            log?.LogMessage(MessageImportance.High, "extracting file {0}", FileName);
             await ZipFile.ExtractToDirectoryAsync(fileStream, filePath, cancellationToken);
+        }
+        else
+        {
+            log?.LogMessage(MessageImportance.High, "downloaded file {0}", FileName);
+        }
     }
 
     public static explicit operator Dependency(ModDBModRelease dbModRelease) => new(dbModRelease);
