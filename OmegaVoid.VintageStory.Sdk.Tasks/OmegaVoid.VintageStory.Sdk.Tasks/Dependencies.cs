@@ -38,21 +38,22 @@ public class Dependencies : BuildTask
 
             var matchedDeps = DependencyParser.MatchDependencies(dependencies1, dependencies2);
 
-            foreach (var modRelease in matchedDeps.Select(pair => (ModDBModRelease)pair))
+            foreach (var modRelease in matchedDeps.Select(pair => pair))
             {
+                var release = (ModDBModRelease)modRelease;
                 await modRelease.DownloadDependency(OutputDir, DependencyDir);
-                var path = Path.Combine(OutputDir, modRelease.FileName);
-                var path2 = Path.Combine(DependencyDir, modRelease.FileName);
+                var path = Path.Combine(OutputDir, release.FileName);
+                var path2 = Path.Combine(DependencyDir, release.FileName);
                 Log.LogMessage(MessageImportance.High,
                     $"Downloaded {modRelease} to {Path.GetRelativePath(Directory.GetCurrentDirectory(), path2)}");
                 Log.LogMessage(MessageImportance.High,
                     $"Extracted {modRelease} to {Path.GetRelativePath(Directory.GetCurrentDirectory(), path.Replace(".zip", ""))}");
                 items.Add(new TaskItem(itemSpec: path.Replace(".zip", ""), new Dictionary<string, string>
                 {
-                    { "ModId", modRelease.IdString }, { "Version", modRelease.Version }, { "Zip", path2 },
+                    { "ModId", release.IdString }, { "Version", release.Version }, { "Zip", path2 },
                     {
                         "String",
-                        ((Dependency)modRelease).ToString()
+                        modRelease.Key.ToString()
                     },
                     { "Folder", path.Replace(".zip", "") }
                 }));

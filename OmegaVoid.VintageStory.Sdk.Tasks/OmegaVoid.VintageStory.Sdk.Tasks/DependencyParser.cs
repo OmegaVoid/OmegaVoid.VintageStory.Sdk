@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using Microsoft.Build.Framework;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices.Swift;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -47,13 +50,17 @@ public static class DependencyParser
         return foo.ToDictionary(x => x.Key, x => x.Value);
     }
 
-    public static async Task DownloadDependency(KeyValuePair<Dependency, ModDBModDetails> dependency, string outputDir,
-        string? dependencyDir = null, CancellationToken cancellationToken = default) =>
-        await ((ModDBModRelease)dependency).DownloadDependency(outputDir, dependencyDir, cancellationToken);
+    // public static async Task DownloadDependency(KeyValuePair<Dependency, ModDBModDetails> dependency, string outputDir,
+    //     string? dependencyDir = null, CancellationToken cancellationToken = default) =>
+    //     await ((ModDBModRelease)dependency).DownloadDependency(outputDir, dependencyDir, cancellationToken);
 
 
     extension(KeyValuePair<Dependency, ModDBModDetails> pair)
     {
         public ModDBModRelease GetRelease() => pair.Value[pair.Key];
+        
+        public async Task DownloadDependency(string outputDir, string? dependencyDir = null,
+            CancellationToken cancellationToken = default) =>
+            await ((ModDBModRelease)pair).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, cancellationToken);
     }
 }

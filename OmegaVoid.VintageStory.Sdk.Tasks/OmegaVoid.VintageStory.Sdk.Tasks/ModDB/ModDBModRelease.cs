@@ -19,9 +19,8 @@ public struct ModDBModRelease : IEquatable<ModDBModRelease>
     [JsonProperty] public string FileName { get; set; }
     [JsonProperty("modidstr")] public string IdString { get; set; }
     [JsonProperty("modversion")] public string Version { get; set; }
-    [JsonIgnore] public bool Fetch { get; set; }
 
-    public async Task DownloadDependency(string outputDir, string? dependencyDir = null,
+    public async Task DownloadDependency(string outputDir, string? dependencyDir = null, bool fetch = true,
         CancellationToken cancellationToken = default)
     {
         dependencyDir ??= Path.Combine(outputDir, "Mods");
@@ -31,7 +30,8 @@ public struct ModDBModRelease : IEquatable<ModDBModRelease>
             FileAccess.Write | FileAccess.Read);
         await downloadStream.CopyToAsync(fileStream, cancellationToken);
         await fileStream.FlushAsync(cancellationToken);
-        await ZipFile.ExtractToDirectoryAsync(fileStream, filePath, cancellationToken);
+        if (fetch)
+            await ZipFile.ExtractToDirectoryAsync(fileStream, filePath, cancellationToken);
     }
 
     public static explicit operator Dependency(ModDBModRelease dbModRelease) => new(dbModRelease);
