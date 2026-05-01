@@ -22,9 +22,16 @@ public struct ModDBModRelease : IEquatable<ModDBModRelease>
     [JsonProperty("modidstr")] public string IdString { get; set; }
     [JsonProperty("modversion")] public string Version { get; set; }
 
-    public async Task DownloadDependency(string outputDir, string? dependencyDir = null, bool fetch = true, TaskLoggingHelper? log = null, 
+    public async Task DownloadDependency(string outputDir, string? dependencyDir = null, bool fetch = true,
+        bool downloadDep = true, TaskLoggingHelper? log = null,
         CancellationToken cancellationToken = default)
     {
+        if (downloadDep == false)
+        {
+            log?.LogMessage(MessageImportance.High, "skipping file {0}", FileName);
+            return;
+        }
+
         log?.LogMessage(MessageImportance.High, "DownloadDependency file {0}", FileName);
 
         dependencyDir ??= Path.Combine(outputDir, "Mods");

@@ -35,7 +35,7 @@ public class Dependencies : BuildTask
             var dependencies1 = DependencyParser.ParseDependencies(Dependency);
             foreach (var item in dependencies1)
                 Log.LogMessage(MessageImportance.High, $"dep {item.Value}");
-            // dependencies1 = dependencies1.Where(pair => pair.Value.Fetch).ToDictionary();
+            dependencies1 = dependencies1.Where(pair => pair.Value.DownloadDep).ToDictionary();
             var dependencies2 = await DependencyParser.FetchModDependencies(dependencies1.Keys);
             foreach (var item in dependencies2)
                 Log.LogMessage(MessageImportance.High, $"dep2 {item.Key}");

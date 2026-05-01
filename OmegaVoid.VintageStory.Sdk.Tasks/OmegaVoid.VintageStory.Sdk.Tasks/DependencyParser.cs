@@ -63,13 +63,13 @@ public static class DependencyParser
         
         public async Task DownloadDependency(string outputDir, string? dependencyDir = null, TaskLoggingHelper? helper = null, 
             CancellationToken cancellationToken = default) =>
-            await ((ModDBModRelease)pair).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, helper, cancellationToken);
+            await ((ModDBModRelease)pair).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, pair.Key.DownloadDep, helper, cancellationToken);
     }
     
     extension(KeyValuePair<Dependency, ModDBModRelease> pair)
     {
         public async Task DownloadDependency(string outputDir, string? dependencyDir = null, TaskLoggingHelper? helper = null, 
             CancellationToken cancellationToken = default) =>
-            await (pair.Value).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, helper, cancellationToken);
+            await (pair.Value).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, pair.Key.DownloadDep, helper, cancellationToken);
     }
 }

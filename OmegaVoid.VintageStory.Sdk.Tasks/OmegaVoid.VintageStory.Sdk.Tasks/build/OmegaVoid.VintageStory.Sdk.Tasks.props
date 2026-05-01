@@ -21,8 +21,8 @@
         <AdditionalModsFolder>$(DataFolder)\Mods</AdditionalModsFolder>
         <EnterWorldCommand Condition="'$(EnterWorldOnStartup)' == 'true'">"-o" "$(WorldName)"</EnterWorldCommand>
         <PackageOutputPath>bin\$(Configuration)</PackageOutputPath>
-        <ModRefFolder>$(AbsoluteIntermediateOutput)\modDeps\</ModRefFolder>
-        <ModDepsFolder>$(AbsoluteIntermediateOutput)\Mods\</ModDepsFolder>
+        <ModRefFolder>$(AbsoluteIntermediateOutput)\modDeps</ModRefFolder>
+        <ModDepsFolder>$(AbsoluteIntermediateOutput)\Mods</ModDepsFolder>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -67,24 +67,24 @@
             <PackageOutputPath>bin\$(Configuration)</PackageOutputPath>
         </PropertyGroup>
 
-        <Message Importance="low" Text="ProjectDir = $(ProjectDir)"/>
-        <Message Importance="low" Text="OutputDir = $(OutputDir)"/>
-        <Message Importance="low" Text="OutputDir2 = $(OutputDir2)"/>
-        <Message Importance="low" Text="OutputPath = $(OutputPath)"/>
-        <Message Importance="low" Text="OutputPath2 = $(OutputPath2)"/>
-        <Message Importance="low" Text="AssetsDir = $(AssetsDir)"/>
-        <Message Importance="low" Text="ModIconFile = $(ModIconFile)"/>
-        <Message Importance="low" Text="ReleasesDir = $(ReleasesDir)"/>
-        <Message Importance="low" Text="ReleaseFile = $(ReleaseFile)"/>
-        <Message Importance="low" Text="ReleasePath = $(ReleasePath)"/>
-        <Message Importance="low" Text="ReleasePathDev = $(ReleasePathDev)"/>
-        <Message Importance="low" Text="ExternalLibDir = $(ExternalLibDir)"/>
-        <Message Importance="low" Text="GameDirectory = $(GameDirectory)"/>
-        <Message Importance="low" Text="AbsoluteIntermediateOutput = $(AbsoluteIntermediateOutput)"/>
-        <Message Importance="low" Text="ModDir = $(ModDir)"/>
-        <Message Importance="low" Text="AdditionalModsFolder = $(AdditionalModsFolder)"/>
-        <Message Importance="low" Text="EnterWorldCommand = $(EnterWorldCommand)"/>
-        <Message Importance="low" Text="PackageOutputPath = $(PackageOutputPath)"/>
+        <Message Importance="high" Text="ProjectDir = $(ProjectDir)"/>
+        <Message Importance="high" Text="OutputDir = $(OutputDir)"/>
+        <Message Importance="high" Text="OutputDir2 = $(OutputDir2)"/>
+        <Message Importance="high" Text="OutputPath = $(OutputPath)"/>
+        <Message Importance="high" Text="OutputPath2 = $(OutputPath2)"/>
+        <Message Importance="high" Text="AssetsDir = $(AssetsDir)"/>
+        <Message Importance="high" Text="ModIconFile = $(ModIconFile)"/>
+        <Message Importance="high" Text="ReleasesDir = $(ReleasesDir)"/>
+        <Message Importance="high" Text="ReleaseFile = $(ReleaseFile)"/>
+        <Message Importance="high" Text="ReleasePath = $(ReleasePath)"/>
+        <Message Importance="high" Text="ReleasePathDev = $(ReleasePathDev)"/>
+        <Message Importance="high" Text="ExternalLibDir = $(ExternalLibDir)"/>
+        <Message Importance="high" Text="GameDirectory = $(GameDirectory)"/>
+        <Message Importance="high" Text="AbsoluteIntermediateOutput = $(AbsoluteIntermediateOutput)"/>
+        <Message Importance="high" Text="ModDir = $(ModDir)"/>
+        <Message Importance="high" Text="AdditionalModsFolder = $(AdditionalModsFolder)"/>
+        <Message Importance="high" Text="EnterWorldCommand = $(EnterWorldCommand)"/>
+        <Message Importance="high" Text="PackageOutputPath = $(PackageOutputPath)"/>
 
         <ItemGroup>
             <AssetsToFormat BaseDir="$(AssetsDir)" Include="$(AssetsDir)\$(PackageId)"/>
@@ -190,6 +190,11 @@
     </Target>
     <Target Name="ZipFilesDev" DependsOnTargets="Vars" AfterTargets="Build"
             Condition=" '$(Configuration)' == 'Debug' and '$(PackageDevBuild)' == 'true'">
+        <ItemGroup>
+            <Placeholders Include="$(OutputDir)\placeholderpackageid\**\*.*"/>
+        </ItemGroup>
+        <Move SourceFiles="@(Placeholders)" DestinationFolder="$(OutputPath)"/>
+        <Delete Files="$(OutputDir)\placeholderpackageid"/>
         <Message Text="Pachaging into '$(ReleaseFile)'" Importance="high"/>
         <Delete Files="$(OutputPath)\$(PackageId).dll" Condition="'$(ModType)' != 'code'"/>
         <Delete Files="$(OutputPath)\$(PackageId).pdb" Condition="'$(ModType)' != 'code'"/>

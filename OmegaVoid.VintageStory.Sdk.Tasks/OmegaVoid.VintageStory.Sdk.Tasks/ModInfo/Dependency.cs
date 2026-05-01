@@ -7,12 +7,13 @@ using Newtonsoft.Json.Linq;
 
 namespace OmegaVoid.VintageStory.Sdk.Tasks.ModInfo;
 
-public record Dependency(string Id, string Version, bool Fetch = true)
+public record Dependency(string Id, string Version, bool Fetch = true, bool DownloadDep = true)
 {
     [JsonIgnore] public bool Fetch { get; } = Fetch;
+    [JsonIgnore] public bool DownloadDep { get; } = DownloadDep;
 
     public Dependency(ITaskItem item) : this(item.GetMetadata("Identity"), item.GetMetadata("Version"),
-        string.IsNullOrEmpty(item.GetMetadata("Fetch")) || bool.Parse(item.GetMetadata("Fetch")))
+        string.IsNullOrEmpty(item.GetMetadata("Fetch")) || bool.Parse(item.GetMetadata("Fetch")), string.IsNullOrEmpty(item.GetMetadata("DownloadDep")) || bool.Parse(item.GetMetadata("DownloadDep")))
     {
     }
 
