@@ -51,6 +51,16 @@ public record Dependency(string Id, string Version, bool Fetch = true, bool Down
             if (ReferenceEquals(x, y)) return 0;
             if (y is null) return 1;
             if (x is null) return -1;
+
+            switch (x.Version)
+            {
+                case "*" when y.Version == "*":
+                    return 0;
+                case "*":
+                    return -1;
+            }
+            if (y.Version == "*")
+                return 1;
             
             List<int[]> intVersions =
             [

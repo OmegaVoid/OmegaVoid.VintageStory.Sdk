@@ -17,7 +17,7 @@
         <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/OmegaVoid/OmegaVoid.VintageStory.Sdk/tree/main/OmegaVoid.VintageStory.Sdk.Tasks</PackageProjectUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.3.1-alpha0027</Version>
+        <Version>0.3.1-alpha0028</Version>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/OmegaVoid/OmegaVoid.VintageStory.Sdk</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
