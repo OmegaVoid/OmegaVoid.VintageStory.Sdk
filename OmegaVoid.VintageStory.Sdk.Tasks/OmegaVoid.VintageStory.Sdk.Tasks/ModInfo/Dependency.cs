@@ -52,16 +52,15 @@ public record Dependency(string Id, string Version, bool Fetch = true, bool Down
             if (y is null) return 1;
             if (x is null) return -1;
 
-            switch (x.Version)
+            switch (x.Version, y.Version)
             {
-                case "*" when y.Version == "*":
+                case ("*" or "", "*" or ""):
                     return 0;
-                case "*":
+                case ("*" or "", _):
                     return -1;
+                case (_, "*" or ""):
+                    return 1;
             }
-            if (y.Version == "*")
-                return 1;
-            
             List<int[]> intVersions =
             [
                 Array.ConvertAll(x.Version.Split('.'), int.Parse),
