@@ -178,6 +178,10 @@
         <ItemGroup>
             <Placeholders Include="$(OutputDir)\placeholderpackageid\**\*.*"/>
         </ItemGroup>
+        <!-- Windows symlink -->
+        <Exec Condition="'$(OS)' == 'Windows_NT'" Command="mklink &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
+        <!-- Linux/macOS symlink -->
+        <Exec Condition="'$(OS)' != 'Windows_NT'" Command="ln -s &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
         <Move SourceFiles="@(Placeholders)" DestinationFolder="$(OutputDir)\$(PackageId)"/>
         <Delete Files="$(OutputDir)\placeholderpackageid"/>
         <Message Text="Packaging into '$(ReleasePath)'" Importance="high"/>
