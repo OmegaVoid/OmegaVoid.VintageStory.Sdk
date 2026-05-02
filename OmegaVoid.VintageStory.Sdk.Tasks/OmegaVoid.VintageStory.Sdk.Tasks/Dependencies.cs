@@ -66,7 +66,7 @@ public class Dependencies : BuildTask
             
             Log.LogMessage(MessageImportance.High, "Duplicate dependencies removed:\n{0}",
                 removed.Aggregate("", (current, dependency) => current + $"\t{dependency}\n"));
-            var itemsDict = items.ToDictionary(item => item.Dependency);
+            var itemsDict = items.DistinctBy(item => item.Dependency).ToDictionary(item => item.Dependency);
             var removedItems = itemsDict.IntersectBy(removed, pair => pair.Key);
             var keepItems = itemsDict.ExceptBy(removed, pair => pair.Key);
 
