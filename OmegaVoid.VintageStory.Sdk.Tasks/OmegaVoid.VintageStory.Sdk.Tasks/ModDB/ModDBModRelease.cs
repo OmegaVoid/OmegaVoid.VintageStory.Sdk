@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Newtonsoft.Json;
@@ -22,14 +24,14 @@ public struct ModDBModRelease : IEquatable<ModDBModRelease>
     [JsonProperty("modidstr")] public string IdString { get; set; }
     [JsonProperty("modversion")] public string Version { get; set; }
 
-    public async Task DownloadDependency(string outputDir, string? dependencyDir = null, bool fetch = true,
+    public async Task<List<ModInfo.ModInfo>?> DownloadDependency(string outputDir, string? dependencyDir = null, bool fetch = true,
         bool downloadDep = true, TaskLoggingHelper? log = null,
         CancellationToken cancellationToken = default)
     {
         if (downloadDep == false)
         {
             log?.LogMessage(MessageImportance.High, "skipping file {0}", FileName);
-            return;
+            return null;
         }
 
         log?.LogMessage(MessageImportance.High, "DownloadDependency file {0}", FileName);
@@ -42,15 +44,32 @@ public struct ModDBModRelease : IEquatable<ModDBModRelease>
         await downloadStream.CopyToAsync(fileStream, cancellationToken);
         await fileStream.FlushAsync(cancellationToken);
         log?.LogMessage(MessageImportance.High, "downloading file {0}", FileName);
+        DirectoryInfo dir;
         if (fetch)
         {
-            log?.LogMessage(MessageImportance.High, "extracting file {0}", FileName);
+            log?.LogMessage(MessageImportance.High, "extracting file {0} to {1}", FileName, filePath);
             await ZipFile.ExtractToDirectoryAsync(fileStream, filePath, cancellationToken);
+            dir = new DirectoryInfo(filePath);
         }
         else
         {
             log?.LogMessage(MessageImportance.High, "downloaded file {0}", FileName);
+            var tempSubdirectory = Directory.CreateTempSubdirectory();
+            log?.LogMessage(MessageImportance.High, "extracting file {0} to temporary directory {1}", FileName, tempSubdirectory);
+            await ZipFile.ExtractToDirectoryAsync(fileStream, tempSubdirectory.FullName, cancellationToken);
+            dir = tempSubdirectory;
         }
+
+        var modInfos = new List<ModInfo.ModInfo>();
+        foreach (var fileInfo in dir.EnumerateFiles("modinfo.json"))
+        {
+            var modinfoText = await File.ReadAllTextAsync(fileInfo.FullName, cancellationToken);
+            var modinfo = JsonConvert.DeserializeObject<ModInfo.ModInfo>(modinfoText);
+            if(modinfo is not null)
+                modInfos.Add(modinfo);
+        }
+
+        return modInfos;
     }
 
     public static explicit operator Dependency(ModDBModRelease dbModRelease) => new(dbModRelease);

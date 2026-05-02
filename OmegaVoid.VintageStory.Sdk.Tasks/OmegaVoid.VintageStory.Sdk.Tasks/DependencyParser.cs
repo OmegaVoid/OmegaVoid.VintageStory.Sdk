@@ -60,16 +60,55 @@ public static class DependencyParser
     extension(KeyValuePair<Dependency, ModDBModDetails> pair)
     {
         public ModDBModRelease GetRelease() => pair.Value[pair.Key];
-        
-        public async Task DownloadDependency(string outputDir, string? dependencyDir = null, TaskLoggingHelper? helper = null, 
+
+        public async Task<List<ModInfo.ModInfo>?> DownloadDependency(string outputDir, string? dependencyDir = null,
+            TaskLoggingHelper? helper = null,
             CancellationToken cancellationToken = default) =>
-            await ((ModDBModRelease)pair).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, pair.Key.DownloadDep, helper, cancellationToken);
+            await ((ModDBModRelease)pair).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch,
+                pair.Key.DownloadDep, helper, cancellationToken);
     }
-    
+
     extension(KeyValuePair<Dependency, ModDBModRelease> pair)
     {
-        public async Task DownloadDependency(string outputDir, string? dependencyDir = null, TaskLoggingHelper? helper = null, 
+        public async Task<List<ModInfo.ModInfo>?> DownloadDependency(string outputDir, string? dependencyDir = null,
+            TaskLoggingHelper? helper = null,
             CancellationToken cancellationToken = default) =>
-            await (pair.Value).DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, pair.Key.DownloadDep, helper, cancellationToken);
+            await pair.Value.DownloadDependency(outputDir, dependencyDir, pair.Key.Fetch, pair.Key.DownloadDep, helper,
+                cancellationToken);
+
+        public TaskItem ToTaskItem(string zipPath, string folderPath)
+        {
+            return new TaskItem(itemSpec: folderPath, new Dictionary<string, string>
+            {
+                { "ModId", pair.Value.IdString }, { "Version", pair.Value.Version }, { "Zip", zipPath },
+                {
+                    "String",
+                    pair.Key.ToString()
+                },
+                { "Folder", folderPath }
+            });
+        }
     }
+}
+
+public record DependencyOutputTaskItem(Dependency Dependency, string ZipPath, string FolderPath)
+{
+    public DependencyOutputTaskItem(ITaskItem item) : this(
+        new Dependency(item.GetMetadata("ModId"), item.GetMetadata("Version")), item.GetMetadata("Zip"),
+        item.GetMetadata("Folder"))
+    {
+    }
+    
+    public static explicit operator TaskItem(DependencyOutputTaskItem depOutput) => new TaskItem(itemSpec: depOutput.FolderPath, new Dictionary<string, string>
+    {
+        { "ModId", depOutput.Dependency.Id }, { "Version", depOutput.Dependency.Version }, { "Zip", depOutput.ZipPath },
+        {
+            "String",
+            depOutput.Dependency.ToString()
+        },
+        { "Folder", depOutput.FolderPath }
+    });
+    
+    public static explicit operator DependencyOutputTaskItem(TaskItem item) => new(item);
+
 }
