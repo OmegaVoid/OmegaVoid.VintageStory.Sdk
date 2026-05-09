@@ -29,5 +29,6 @@
     </PropertyGroup>
     <ItemGroup>
         <Dependency Include="game" Version="*" Fetch="false" />
+<!--    <Dependency Include="game" Version="*" Fetch="false" DownloadDep="false" />-->
     </ItemGroup>
 </Project>

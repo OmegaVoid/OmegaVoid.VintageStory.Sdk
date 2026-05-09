@@ -13,6 +13,6 @@
         <IsPackable>true</IsPackable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="OmegaVoid.VintageStory.Sdk.Tasks" Version="0.3.*"/>
+        <PackageReference Include="OmegaVoid.VintageStory.Sdk.Tasks" Version="0.4.*"/>
     </ItemGroup>
 </Project>

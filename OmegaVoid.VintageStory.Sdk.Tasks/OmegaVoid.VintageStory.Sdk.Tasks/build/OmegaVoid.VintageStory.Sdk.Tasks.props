@@ -9,8 +9,8 @@
 
     <PropertyGroup>
         <ProjectDir>$(MSBuildProjectDirectory)</ProjectDir>
-        <OutputDir>bin\$(Configuration)\Mods</OutputDir>
-        <OutputPath>$(OutputDir)\placeholderpackageid</OutputPath>
+<!--        <OutputDir>bin\$(Configuration)\Mods</OutputDir>-->
+<!--        <OutputPath>$(OutputDir)\placeholderpackageid</OutputPath>-->
         <AssetsDir>$(ProjectDir)\resources\assets</AssetsDir>
         <ModIconFile>$(ProjectDir)\resources\modicon.png</ModIconFile>
         <ReleasesDir>$(ProjectDir)\Releases</ReleasesDir>
@@ -50,8 +50,8 @@
         <MakeDir Directories="resources\assets\$(PackageId)"/>
         <PropertyGroup>
             <ProjectDir>$(MSBuildProjectDirectory)</ProjectDir>
-            <OutputDir>bin\$(Configuration)\Mods</OutputDir>
-            <OutputPath>$(OutputDir)\$(PackageId)</OutputPath>
+<!--            <OutputDir>bin\$(Configuration)\Mods</OutputDir>-->
+<!--            <OutputPath>$(OutputDir)\$(PackageId)</OutputPath>-->
             <AssetsDir>$(ProjectDir)\resources\assets</AssetsDir>
             <ModIconFile>$(ProjectDir)\resources\modicon.png</ModIconFile>
             <ReleasesDir>$(ProjectDir)\Releases</ReleasesDir>
@@ -67,24 +67,24 @@
             <PackageOutputPath>bin\$(Configuration)</PackageOutputPath>
         </PropertyGroup>
 
-        <Message Importance="high" Text="ProjectDir = $(ProjectDir)"/>
-        <Message Importance="high" Text="OutputDir = $(OutputDir)"/>
-        <Message Importance="high" Text="OutputDir2 = $(OutputDir2)"/>
-        <Message Importance="high" Text="OutputPath = $(OutputPath)"/>
-        <Message Importance="high" Text="OutputPath2 = $(OutputPath2)"/>
-        <Message Importance="high" Text="AssetsDir = $(AssetsDir)"/>
-        <Message Importance="high" Text="ModIconFile = $(ModIconFile)"/>
-        <Message Importance="high" Text="ReleasesDir = $(ReleasesDir)"/>
-        <Message Importance="high" Text="ReleaseFile = $(ReleaseFile)"/>
-        <Message Importance="high" Text="ReleasePath = $(ReleasePath)"/>
-        <Message Importance="high" Text="ReleasePathDev = $(ReleasePathDev)"/>
-        <Message Importance="high" Text="ExternalLibDir = $(ExternalLibDir)"/>
-        <Message Importance="high" Text="GameDirectory = $(GameDirectory)"/>
-        <Message Importance="high" Text="AbsoluteIntermediateOutput = $(AbsoluteIntermediateOutput)"/>
-        <Message Importance="high" Text="ModDir = $(ModDir)"/>
-        <Message Importance="high" Text="AdditionalModsFolder = $(AdditionalModsFolder)"/>
-        <Message Importance="high" Text="EnterWorldCommand = $(EnterWorldCommand)"/>
-        <Message Importance="high" Text="PackageOutputPath = $(PackageOutputPath)"/>
+        <Message Importance="low" Text="ProjectDir = $(ProjectDir)"/>
+        <Message Importance="low" Text="OutputDir = $(OutputDir)"/>
+        <Message Importance="low" Text="OutputDir2 = $(OutputDir2)"/>
+        <Message Importance="low" Text="OutputPath = $(OutputPath)"/>
+        <Message Importance="low" Text="OutputPath2 = $(OutputPath2)"/>
+        <Message Importance="low" Text="AssetsDir = $(AssetsDir)"/>
+        <Message Importance="low" Text="ModIconFile = $(ModIconFile)"/>
+        <Message Importance="low" Text="ReleasesDir = $(ReleasesDir)"/>
+        <Message Importance="low" Text="ReleaseFile = $(ReleaseFile)"/>
+        <Message Importance="low" Text="ReleasePath = $(ReleasePath)"/>
+        <Message Importance="low" Text="ReleasePathDev = $(ReleasePathDev)"/>
+        <Message Importance="low" Text="ExternalLibDir = $(ExternalLibDir)"/>
+        <Message Importance="low" Text="GameDirectory = $(GameDirectory)"/>
+        <Message Importance="low" Text="AbsoluteIntermediateOutput = $(AbsoluteIntermediateOutput)"/>
+        <Message Importance="low" Text="ModDir = $(ModDir)"/>
+        <Message Importance="low" Text="AdditionalModsFolder = $(AdditionalModsFolder)"/>
+        <Message Importance="low" Text="EnterWorldCommand = $(EnterWorldCommand)"/>
+        <Message Importance="low" Text="PackageOutputPath = $(PackageOutputPath)"/>
 
         <ItemGroup>
             <AssetsToFormat BaseDir="$(AssetsDir)" Include="$(AssetsDir)\$(PackageId)"/>
@@ -175,13 +175,13 @@
 
     <!-- Archives output directory into zip and puts it into Releases folder -->
     <Target Name="ZipFiles" DependsOnTargets="Vars" AfterTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
-        <ItemGroup>
-            <Placeholders Include="$(ProjectDir)\$(OutputDir)\placeholderpackageid\**\*.*"/>
-        </ItemGroup>
+<!--        <ItemGroup>-->
+<!--            <Placeholders Include="$(ProjectDir)\$(OutputDir)\placeholderpackageid\**\*.*"/>-->
+<!--        </ItemGroup>-->
         <!-- Windows symlink -->
-        <Exec Condition="'$(OS)' == 'Windows_NT'" Command="mklink &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
+<!--        <Exec Condition="'$(OS)' == 'Windows_NT'" Command="mklink &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />-->
         <!-- Linux/macOS symlink -->
-        <Exec Condition="'$(OS)' != 'Windows_NT'" Command="ln -fs &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
+<!--        <Exec Condition="'$(OS)' != 'Windows_NT'" Command="ln -fs &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />-->
 <!--        <Move SourceFiles="@(Placeholders)" DestinationFolder="$(OutputDir)\$(PackageId)"/>-->
 <!--        <Delete Files="$(OutputDir)\placeholderpackageid"/>-->
         <Message Text="Packaging into '$(ReleasePath)'" Importance="high"/>
@@ -194,13 +194,13 @@
     </Target>
     <Target Name="ZipFilesDev" DependsOnTargets="Vars" AfterTargets="Build"
             Condition=" '$(Configuration)' == 'Debug' and '$(PackageDevBuild)' == 'true'">
-        <ItemGroup>
-            <Placeholders Include="$(ProjectDir)\$(OutputDir)\placeholderpackageid\**\*.*"/>
-        </ItemGroup>
+<!--        <ItemGroup>-->
+<!--            <Placeholders Include="$(ProjectDir)\$(OutputDir)\placeholderpackageid\**\*.*"/>-->
+<!--        </ItemGroup>-->
         <!-- Windows symlink -->
-        <Exec Condition="'$(OS)' == 'Windows_NT'" Command="mklink &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
+<!--        <Exec Condition="'$(OS)' == 'Windows_NT'" Command="mklink &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />-->
         <!-- Linux/macOS symlink -->
-        <Exec Condition="'$(OS)' != 'Windows_NT'" Command="ln -fs &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
+<!--        <Exec Condition="'$(OS)' != 'Windows_NT'" Command="ln -fs &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />-->
 <!--        <Move SourceFiles="@(Placeholders)" DestinationFolder="$(OutputPath)"/>-->
 <!--        <Delete Files="$(OutputDir)\placeholderpackageid"/>-->
         <Message Text="Pachaging into '$(ReleaseFile)'" Importance="high"/>

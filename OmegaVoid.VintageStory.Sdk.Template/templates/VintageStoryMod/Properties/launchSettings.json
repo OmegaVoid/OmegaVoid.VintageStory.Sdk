@@ -3,7 +3,7 @@
     "Client": {
       "commandName": "Executable",
       "executablePath": "dotnet",
-      "commandLineArgs": "\"$(GameDirectory)/Vintagestory.dll\" --tracelog --dataPath \"$(DataFolder)\" --addModPath \"$(AdditionalModsFolder)\" \"$(ReleasesDir)\" \"$(ModDepsFolder)\" $(EnterWorldCommand)",
+      "commandLineArgs": "\"$(GameDirectory)/Vintagestory.dll\" --tracelog --dataPath \"$(DataFolder)\" --addModPath \"$(AdditionalModsFolder)\" \"$(ProjectDir)/bin/Debug/Mods\" \"$(ModDepsFolder)\" $(EnterWorldCommand)",
       "workingDirectory": "$(GameDirectory)"
     },
     "Server": {
@@ -16,6 +16,18 @@
       "commandName": "Executable",
       "executablePath": "dotnet",
       "commandLineArgs": "nuget push ../$(PackageId).$(Version).nupkg --api-key $(ApiKey) --source https://api.nuget.org/v3/index.json"
+    },
+    "RenderDoc": {
+      "commandName": "Executable",
+      "executablePath": "renderdoccmd",
+      "workingDirectory": "$(GameDirectory)",
+      "commandLineArgs": "capture --working-dir $(GameDirectory) -w /usr/bin/dotnet \"$(GameDirectory)/Vintagestory.dll\" --tracelog --dataPath \"$(DataFolder)\" --addModPath \"$(AdditionalModsFolder)\" \"$(ReleasesDir)\" \"$(ModDepsFolder)\" $(EnterWorldCommand)"
+    },
+    "RenderDoc GUI": {
+      "commandName": "Executable",
+      "executablePath": "qrenderdoc",
+      "workingDirectory": "$(GameDirectory)",
+      "commandLineArgs": "--targetcontrol"
     }
   }
 }
