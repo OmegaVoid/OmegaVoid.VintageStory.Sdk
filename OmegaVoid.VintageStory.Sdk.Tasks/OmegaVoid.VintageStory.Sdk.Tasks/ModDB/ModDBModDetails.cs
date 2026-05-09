@@ -26,6 +26,11 @@ public struct ModDBModDetails
         ModReleaseVersions = Releases.ToDictionary(release => release.Version, release => release).AsReadOnly();
     }
 
-    public ModDBModRelease this[Dependency dependency] => ModReleases[dependency];
-    public ModDBModRelease this[string version] => ModReleaseVersions[version];
+    public ModDBModRelease this[Dependency dependency] => dependency.Version == "*"
+        ? ModReleases.Select(pair => pair.Value).MaxBy(pair => (Dependency)pair)
+        : ModReleases[dependency];
+
+    public ModDBModRelease this[string version] => version == "*"
+        ? ModReleases.Select(pair => pair.Value).MaxBy(pair => (Dependency)pair)
+        : ModReleaseVersions[version];
 }

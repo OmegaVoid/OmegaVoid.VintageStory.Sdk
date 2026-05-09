@@ -38,35 +38,45 @@ public class Dependencies : BuildTask
 
             var allDeps = new List<Dependency>();
 
-            ICollection<Dependency> ProcessHandledOutput(KeyValuePair<TaskItem, ICollection<Dependency>> depData)
+            var nestedDepsToResolve = new List<Dependency>();
+
+            foreach (var depData in await HandleDependencies(DependencyParser.ParseDependencies(Dependency)))
             {
                 items.Add((DependencyOutputTaskItem)depData.Key);
                 allDeps.AddRange(depData.Value);
-                return depData.Value;
+                nestedDepsToResolve.AddRange(depData.Value);
             }
 
-
-            var nestedDepsToResolve =
-                (await HandleDependencies(DependencyParser.ParseDependencies(Dependency))).SelectMany(
-                    ProcessHandledOutput);
-
-            while (nestedDepsToResolve.Any())
+            Log.LogMessage(MessageImportance.High, "first dependencies:\n{0}",
+                items.Aggregate("", (current, dependency) => current + $"\t{dependency.Dependency}\n"));
+            
+            
+            while (nestedDepsToResolve.Count > 0)
             {
                 Log.LogMessage(MessageImportance.High, "Found dependencies:\n{0}",
-                    nestedDepsToResolve.Aggregate("", (current, dependency) => current + $"\t{dependency}\n"));
-                var nextNested = (await HandleDependencies(nestedDepsToResolve)).SelectMany(ProcessHandledOutput);
+                    allDeps.Aggregate("", (current, dependency) => current + $"\t{dependency}\n"));
+                
+                var nextNested = new List<Dependency>();
+                foreach (var depData in await HandleDependencies(nestedDepsToResolve))
+                {
+                    items.Add((DependencyOutputTaskItem)depData.Key);
+                    allDeps.AddRange(depData.Value);
+                    nextNested.AddRange(depData.Value);
+                }
                 nestedDepsToResolve = nextNested;
             }
 
             Log.LogMessage(MessageImportance.High, "All dependencies found:\n{0}",
                 allDeps.Aggregate("", (current, dependency) => current + $"\t{dependency}\n"));
 
-            var test = allDeps.GroupBy(dep => dep.Id).Select(grouping => grouping.OrderDescending().First());
+            var test = allDeps.Where(dependency => dependency.Id != "game").GroupBy(dep => dep.Id).Select(grouping => grouping.OrderDescending().First());
+            
+            var itemsDict = items.DistinctBy(item => item.Dependency).ToDictionary(item => item.Dependency);
+            
             var removed = allDeps.Except(test);
             
             Log.LogMessage(MessageImportance.High, "Duplicate dependencies removed:\n{0}",
                 removed.Aggregate("", (current, dependency) => current + $"\t{dependency}\n"));
-            var itemsDict = items.DistinctBy(item => item.Dependency).ToDictionary(item => item.Dependency);
             var removedItems = itemsDict.IntersectBy(removed, pair => pair.Key);
             var keepItems = itemsDict.ExceptBy(removed, pair => pair.Key);
 
@@ -136,7 +146,7 @@ public class Dependencies : BuildTask
         foreach (var item in dependencies2)
             Log.LogMessage(MessageImportance.Low, $"dep2 {item.Key}");
         var matchedDeps2 =
-            dependencies1.ToDictionary(pair => pair.Value, pair => dependencies2[pair.Value][pair.Value]);
+            dependencies1.ToDictionary(pair => pair.Value, pair => dependencies2.First(valuePair => valuePair.Key.Id == pair.Value.Id).Value[pair.Value]);
         return matchedDeps2;
     }
 

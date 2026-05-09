@@ -54,11 +54,14 @@ public record Dependency(string Id, string Version, bool Fetch = true, bool Down
 
             switch (x.Version, y.Version)
             {
+                case (_, _) when x.Version.Contains('-') && y.Version.Contains('-'):
                 case ("*" or "", "*" or ""):
                     return 0;
                 case ("*" or "", _):
+                case (_, _) when y.Version.Contains('-'):
                     return -1;
                 case (_, "*" or ""):
+                case (_, _) when x.Version.Contains('-'):
                     return 1;
             }
             List<int[]> intVersions =

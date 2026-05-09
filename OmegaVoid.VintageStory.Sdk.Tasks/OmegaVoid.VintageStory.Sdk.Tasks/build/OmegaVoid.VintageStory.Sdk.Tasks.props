@@ -176,14 +176,14 @@
     <!-- Archives output directory into zip and puts it into Releases folder -->
     <Target Name="ZipFiles" DependsOnTargets="Vars" AfterTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
         <ItemGroup>
-            <Placeholders Include="$(OutputDir)\placeholderpackageid\**\*.*"/>
+            <Placeholders Include="$(ProjectDir)\$(OutputDir)\placeholderpackageid\**\*.*"/>
         </ItemGroup>
         <!-- Windows symlink -->
         <Exec Condition="'$(OS)' == 'Windows_NT'" Command="mklink &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
         <!-- Linux/macOS symlink -->
-        <Exec Condition="'$(OS)' != 'Windows_NT'" Command="ln -s &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
-        <Move SourceFiles="@(Placeholders)" DestinationFolder="$(OutputDir)\$(PackageId)"/>
-        <Delete Files="$(OutputDir)\placeholderpackageid"/>
+        <Exec Condition="'$(OS)' != 'Windows_NT'" Command="ln -fs &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
+<!--        <Move SourceFiles="@(Placeholders)" DestinationFolder="$(OutputDir)\$(PackageId)"/>-->
+<!--        <Delete Files="$(OutputDir)\placeholderpackageid"/>-->
         <Message Text="Packaging into '$(ReleasePath)'" Importance="high"/>
         <Delete Files="$(OutputPath)\$(PackageId).dll" Condition="'$(ModType)' != 'code'"/>
         <Delete Files="$(OutputPath)\$(PackageId).pdb" Condition="'$(ModType)' != 'code'"/>
@@ -195,10 +195,14 @@
     <Target Name="ZipFilesDev" DependsOnTargets="Vars" AfterTargets="Build"
             Condition=" '$(Configuration)' == 'Debug' and '$(PackageDevBuild)' == 'true'">
         <ItemGroup>
-            <Placeholders Include="$(OutputDir)\placeholderpackageid\**\*.*"/>
+            <Placeholders Include="$(ProjectDir)\$(OutputDir)\placeholderpackageid\**\*.*"/>
         </ItemGroup>
-        <Move SourceFiles="@(Placeholders)" DestinationFolder="$(OutputPath)"/>
-        <Delete Files="$(OutputDir)\placeholderpackageid"/>
+        <!-- Windows symlink -->
+        <Exec Condition="'$(OS)' == 'Windows_NT'" Command="mklink &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
+        <!-- Linux/macOS symlink -->
+        <Exec Condition="'$(OS)' != 'Windows_NT'" Command="ln -fs &quot;%(Placeholders.Identity)&quot; &quot;$(OutputDir)\$(PackageId)&quot;" />
+<!--        <Move SourceFiles="@(Placeholders)" DestinationFolder="$(OutputPath)"/>-->
+<!--        <Delete Files="$(OutputDir)\placeholderpackageid"/>-->
         <Message Text="Pachaging into '$(ReleaseFile)'" Importance="high"/>
         <Delete Files="$(OutputPath)\$(PackageId).dll" Condition="'$(ModType)' != 'code'"/>
         <Delete Files="$(OutputPath)\$(PackageId).pdb" Condition="'$(ModType)' != 'code'"/>
